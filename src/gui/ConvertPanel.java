@@ -2,6 +2,9 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 import conversions.*;
 import old.ShowPanel;
@@ -11,7 +14,7 @@ import old.ShowPanel;
  * @author Matthew Corless
  *
  */
-public class ConvertPanel extends JFrame
+public class ConvertPanel extends JPanel implements KeyListener
 {
 	private static ConvertPanel instance = null;
 	private JTextField decField, binField, octField, hexField;
@@ -25,7 +28,7 @@ public class ConvertPanel extends JFrame
 	private String input;
 	private Font myFont = new Font("Cambria", Font.BOLD, 24);
 	private Font smallerFont = new Font("Cambria", Font.BOLD, 16);
-	
+	private JFrame frame;
 	GridBagConstraints c = new GridBagConstraints();
 	
 	
@@ -46,17 +49,31 @@ public class ConvertPanel extends JFrame
 	
 	public void cpInit()
 	{
+		frame = new JFrame("Converter");
 		setLayout(new GridBagLayout());
 		
 		initLabels();
-		initTextFields();
+		initTextFields();	
 		
-		c.weightx = 0.7;
-		c.weighty = 0.7;
+		c.weightx = 0.3;
+		c.weighty = 0.3;
+		c.insets = new Insets(0, 10, 0, 0);
+		errorLbl = new JLabel("New label");
+		errorLbl.setForeground(Color.RED);
+		errorLbl.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 13));
+		errorLbl.setVisible(false);
+		c.gridx = 0;
+		c.gridy = 4;
+		c.gridwidth = 3;
+		add(errorLbl, c);
+		
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		c.insets = new Insets (0, 20, 10, 20);
 		convertBtn = new JButton("Convert");
 		convertBtn.setToolTipText("Convert your current input.");
 		convertBtn.setFont(myFont);
+		convertBtn.setBackground(new Color(211, 234, 255));
 		convertBtn.addActionListener(new ActionListener()
 				{
 					public void actionPerformed(ActionEvent e)
@@ -71,30 +88,56 @@ public class ConvertPanel extends JFrame
 		c.anchor = GridBagConstraints.CENTER;
 		add(convertBtn, c);
 		
+		/*
+		addComponentListener(new ComponentAdapter() 
+		{  
+		        public void componentResized(ComponentEvent event) 
+		        {
+		            //UpdateSize();
+		        	
+		        	Rectangle r = frame.getBounds();
+		        	int h = r.height;
+		        	int w = r.width;
+		        	System.out.println("h: " + h + " w: " + w);
+		        }
+		});
+		*/
 		
-		errorLbl = new JLabel("New label");
-		errorLbl.setForeground(Color.RED);
-		errorLbl.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 13));
-		errorLbl.setVisible(false);
-		c.gridx = 0;
-		c.gridy = 4;
-		c.anchor = GridBagConstraints.CENTER;
-		add(errorLbl, c);
 		
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setMinimumSize(new Dimension(300, 140));
-		setPreferredSize(new Dimension(400, 250));
-		pack();
-		setVisible(true);
+		setBackground(new Color(233, 229, 255));
+		frame.add(this);
+		setTrayIcon();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setMinimumSize(new Dimension(300, 140));
+		frame.setPreferredSize(new Dimension(450, 250));
+		frame.pack();
+		convertBtn.requestFocus();
+		frame.setVisible(true);
 	}
 	
-	
+	/**
+	 * Set The tray Icon for the program. Different settings and operating systems
+	 * can require different image sizes so a list is used.
+	 */
+	private void setTrayIcon() 
+	{	
+		List<Image> icons = new ArrayList<Image>();
+		
+		java.net.URL imgUrl = ConvertPanel.class.getResource("/resources/images/calculator16.png");
+		icons.add(new ImageIcon(imgUrl).getImage());
+		imgUrl = ConvertPanel.class.getResource("/resources/images/calculator32.png");
+		icons.add(new ImageIcon(imgUrl).getImage());
+		imgUrl = ConvertPanel.class.getResource("/resources/images/calculator64.png");
+		icons.add(new ImageIcon(imgUrl).getImage());
+		frame.setIconImages(icons);
+	}
+
 	private void initLabels()
 	{
-		c.weightx = 0.3;
-		c.weighty = 0.3;
+		c.weightx = 0.5;
+		c.weighty = 0.5;
 		// label constants
 		c.gridx = 0;
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -124,10 +167,9 @@ public class ConvertPanel extends JFrame
 	
 	private void initTextFields()
 	{
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		
 		// constants for all textfields
+		c.weightx = 1.5;
+		c.weighty = 1.5;
 		c.gridx = 1;
 		c.gridwidth = 2;
 		c.fill=GridBagConstraints.HORIZONTAL;
@@ -135,7 +177,8 @@ public class ConvertPanel extends JFrame
 		
 		// Decimal TextField
 		decField = new JTextField("Max: 2147483647");
-		decField.setFont(smallerFont);
+		decField.setFont(myFont);
+		decField.setForeground(Color.LIGHT_GRAY);
 		decField.setToolTipText("Decimal Input");
 		decField.addMouseListener(new MouseAdapter()
 		{
@@ -145,12 +188,14 @@ public class ConvertPanel extends JFrame
                 clearFields();
             }
         });
+		decField.addKeyListener(this);
+		
 		c.gridy = 0;
 		add(decField, c);
 		
 		// Binary TextField
 		binField = new JTextField();
-		binField.setFont(smallerFont);
+		binField.setFont(myFont);
 		binField.setToolTipText("Binary Input");
 		binField.addMouseListener(new MouseAdapter()
 		{
@@ -161,11 +206,12 @@ public class ConvertPanel extends JFrame
             }
         });
 		c.gridy = 1;
+		binField.addKeyListener(this);
 		add(binField, c);
 		
 		// Hexadecimal TextField
 		hexField = new JTextField();
-		hexField.setFont(smallerFont);
+		hexField.setFont(myFont);
 		hexField.setToolTipText("Hexadecimal Input");
 		hexField.addMouseListener(new MouseAdapter()
 		{
@@ -176,11 +222,12 @@ public class ConvertPanel extends JFrame
             }
         });
 		c.gridy = 2;
+		hexField.addKeyListener(this);
 		add(hexField, c);
 		
 		// Octal TextField
 		octField = new JTextField();
-		octField.setFont(smallerFont);
+		octField.setFont(myFont);
 		octField.setToolTipText("octal input");
 		octField.addMouseListener(new MouseAdapter()
 		{
@@ -191,6 +238,7 @@ public class ConvertPanel extends JFrame
             }
         });
 		c.gridy = 3;
+		octField.addKeyListener(this);
 		add(octField, c);
 	}
 
@@ -201,7 +249,7 @@ public class ConvertPanel extends JFrame
 	{
 		try
 		{
-			if (!decField.getText().equals(""))
+			if (decField == frame.getFocusOwner())
 			{
 				input = decField.getText();
 				dec = new Decimal(decField.getText());
@@ -213,7 +261,7 @@ public class ConvertPanel extends JFrame
 					octField.setText(result[2]);
 				} else
 					invalid("");
-			} else if (!binField.getText().equals(""))
+			} else if (binField == frame.getFocusOwner())
 			{
 				input = binField.getText();
 				bin = new Binary(binField.getText());
@@ -225,7 +273,7 @@ public class ConvertPanel extends JFrame
 					octField.setText(result[2]);
 				} else
 					invalid("");
-			} else if (!hexField.getText().equals(""))
+			} else if (hexField == frame.getFocusOwner())
 			{
 				input = hexField.getText();
 				hex = new Hexadecimal(hexField.getText());
@@ -237,7 +285,7 @@ public class ConvertPanel extends JFrame
 					octField.setText(result[2]);
 				} else
 					invalid("");
-			} else if(!octField.getText().equals(""))
+			} else if (octField == frame.getFocusOwner())
 			{
 				input = octField.getText();
 				oct = new Octal(octField.getText());
@@ -256,7 +304,7 @@ public class ConvertPanel extends JFrame
 		}
 		catch (NumberFormatException e)
 		{
-			invalid("");
+			invalid(": max decimal value is 2147483647.");
 		}
 	}
 	
@@ -280,5 +328,40 @@ public class ConvertPanel extends JFrame
 	{
 		errorLbl.setVisible(true);
 		errorLbl.setText("Invalid input" + s);
+	}
+	
+	
+	/**
+	 * Called when a key is pressed while a textfield is focused.
+	 * Resets DecField to get rid of max int string.
+	 * @param e
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) 
+	{
+		String s = decField.getText();
+		String sthreechars = s.substring(0, Math.min(s.length(), 3));
+		decField.setForeground(Color.BLACK);
+		
+		if (sthreechars.equals("Max"))
+		{
+			decField.setText("");
+		}
+	}
+	
+	/**
+	 * Converts the input when the user releases the pressed key.
+	 * @param e
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) 
+	{
+		convertInput();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) 
+	{
+		// do nothing
 	}
 }
