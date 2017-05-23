@@ -3,6 +3,6 @@ Simple Java GUI that converts inputs from/to Binary, Decimal, Hexadecimal, and O
 
 
 ## Features
-Dynamically changing inputs and font sizes.
-Singleton
-JUnit Testing
+* Dynamically changing inputs and font sizes.
+* JUnit Testing
+* Singleton class
