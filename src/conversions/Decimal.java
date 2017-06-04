@@ -1,54 +1,41 @@
 package conversions;
 
+import generic.Tuple;
+
 public class Decimal
 {
-	private String Output = "";
-	private  int input;
-	String s;
+	private String decimal;
 	
 	public Decimal(String input)
 	{
-		s = input;
+		decimal = input;
 	}
 	
 	private String DecimalToDecimal()
 	{
-		return s;
+		return decimal;
 	}
 
 	private String DecimalToBinary()
 	{
-		return Integer.toBinaryString(Integer.parseInt(s));
+		return Integer.toBinaryString(Integer.parseInt(decimal));
 	}
 
 	private String DecimalToHex()
 	{
-		return Integer.toHexString(Integer.parseInt(s));
-	}
-
-	private String DecimalToASCII()
-	{
-		input = Integer.parseInt(s);
-		if(input < 128)
-		{
-			char temp = (char) input;
-			Output = Character.toString(temp);
-		}
-		else
-			Output = "Cannot convert above 127";
-		return Output;
+		return Integer.toHexString(Integer.parseInt(decimal));
 	}
 
 	private String DecimalToOctal()
 	{
-		return Integer.toOctalString(Integer.parseInt(s));
+		return Integer.toOctalString(Integer.parseInt(decimal));
 	}
 
-	public boolean isValid(String text)
+	public boolean isValid()
 	{
 		try
 		{
-			input = Integer.parseInt(text);
+			Integer.parseInt(decimal);
 		}
 		catch(NumberFormatException dec)
 		{
@@ -57,13 +44,9 @@ public class Decimal
 		return true;
 	}
 	
-	public String[] convertDecimal()
-	{
-		String[] result = new String[4];
-		result[0] = DecimalToBinary();
-		result[1] = DecimalToHex();
-		result[2] = DecimalToOctal();
-		return result;
+	public Tuple<String, String, String, String> convertDecimal()
+	{	
+		return new Tuple<String, String, String, String>
+						(decimal, DecimalToBinary(), DecimalToHex(), DecimalToOctal());
 	}
-	
 }

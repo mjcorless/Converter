@@ -1,57 +1,52 @@
 package conversions;
 
+import generic.Tuple;
+
 public class Octal
 {
-	private String s;
+	private String octal;
 	
 	public Octal(String input)
 	{
-		s = input; 
+		octal = input; 
 	}
 	
 	private String OctalToDecimal()
 	{
-		return Integer.toString(Integer.parseInt(s,8));
+		return Integer.toString(Integer.parseInt(octal,8));
 	}
 
 	private String OctalToBinary()
 	{
-		return Integer.toBinaryString(Integer.parseInt(s,8));
+		return Integer.toBinaryString(Integer.parseInt(octal,8));
 	}
 
 	private String OctalToHex()
 	{
-		return Integer.toHexString(Integer.parseInt(s,8));
+		return Integer.toHexString(Integer.parseInt(octal,8));
 	}
-	
-	//
-	//String OctalToASCII()
-	//{
-	//	String imLazy = OctalToDecimal();
-		//Decimal temp = new Decimal(imLazy);
-		//return temp.DecimalToASCII();
-	//}
 
 	private String OctalToOctal()
 	{
-		return s;
+		return octal;
 	}
 	
-	public boolean isValid(String text)
+	public boolean isValid()
 	{
-		int temp = Integer.parseInt(text);
+		int temp = Integer.parseInt(octal);
 		if (temp >= 0)
+		{
 			return true;
+		}
 		else
+		{
 			return false;
+		}
 	}
-	
-	public String[] convertOctal()
+
+	public Tuple<String, String, String, String> convertOctal()
 	{
-		String[] result = new String[4];
-		result[0] = OctalToDecimal();
-		result[1] = OctalToBinary();
-		result[2] = OctalToHex();
-		return result;
+		return new Tuple<String, String, String, String>
+						(OctalToDecimal(), OctalToBinary(), OctalToHex(), octal);
 	}
 }

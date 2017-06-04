@@ -1,68 +1,53 @@
 package conversions;
 
+import generic.Tuple;
+
 public class Binary
 {
-	private String Output = "";
-	private  int input;
-	private  String s;
-	
+	private String binary;
+
 	public Binary(String input)
 	{
-		s = input;
+		binary = input;
 	}
 
 	private String BinaryToDecimal()
 	{
-		return Integer.toString(Integer.parseInt(s,2));
+		return Integer.toString(Integer.parseInt(binary,2));
 	}
 
 	private String BinaryToBinary()
 	{
-		return s;
+		return binary;
 	}
 
 	private String BinaryToHex()
 	{
-		return Integer.toHexString(Integer.parseInt(s,2));
-	}
-
-	private String BinaryToASCII()
-	{
-		input = Integer.parseInt(s,2);
-		if (input > 127)
-			Output = "Not a valid ASCII character";
-		else
-			Output = new Character((char)input).toString();
-		return Output;
+		return Integer.toHexString(Integer.parseInt(binary,2));
 	}
 
 	private String BinaryToOctal()
 	{
-		return Integer.toOctalString(Integer.parseInt(s, 2));
+		return Integer.toOctalString(Integer.parseInt(binary, 2));
 	}
 
-	public boolean isValid(String input)
+	public boolean isValid()
 	{
 		char temp;
-		for (int i = 0; i < input.length(); i++)
+		for (int i = 0; i < binary.length(); i++)
 		{
-			temp = input.charAt(i);
+			temp = binary.charAt(i);
 			if (temp != '1' && temp != '0')
-				return false;
-			else
 			{
-				// do nothing
-			}
+				return false;
+			} 
 		}
 		return true;
-	}
+	}	
 	
-	public String[] convertBinary()
-	{
-		String[] result = new String[4];
-		result[0] = BinaryToDecimal();
-		result[1] = BinaryToHex();
-		result[2] = BinaryToOctal();
-		return result;
+	public Tuple<String, String, String, String> convertBinary()
+	{	
+		return new Tuple<String, String, String, String>
+						(BinaryToDecimal(), binary, BinaryToHex(), BinaryToOctal());
 	}
 }

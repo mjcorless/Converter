@@ -1,4 +1,4 @@
-package javaFxImplementation;
+package gui;
 
 
 import conversions.*;
@@ -12,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -31,6 +30,16 @@ public class ConvertWindow extends Application
 	private Label errorLbl;
 	private Convert convert;
 	private Tuple<String, String, String, String> result;
+	
+	enum Input 
+	{
+		decimal,
+		binary,
+		hexadecimal,
+		octal;
+	}
+	private Input lastInput;
+	
 	
 	
 	@Override
@@ -68,6 +77,7 @@ public class ConvertWindow extends Application
 		
 		convertBtn = new Button("Convert");
 		GridPane.setHalignment(convertBtn, HPos.CENTER);
+		convertBtn.setOnAction(e -> convertInput());
 		gridpane.add(convertBtn, 0, 5);
 		
 		
@@ -77,10 +87,11 @@ public class ConvertWindow extends Application
 		gridpane.add(showBtn, 1, 5);
 		
 		
-		gridpane.setAlignment(Pos.TOP_CENTER);
+		gridpane.setAlignment(Pos.CENTER);
 		scene = new Scene(gridpane, 250, 150);
-		convertBtn.requestFocus();
+		//convertBtn.requestFocus();
 		convertWindow.setScene(scene);
+		convertWindow.setResizable(false);
 		convertWindow.show();
 	}
 	
@@ -96,66 +107,119 @@ public class ConvertWindow extends Application
 		gridpane.add(octLbl, 0, 3);
 	}
 	
+	/**
+	 * Initialize the text fields and their action listeners.
+	 * 
+	 * 6/4/2017 note: Dynamically updating the conversions when something was entered led to issues
+	 * with the position caret. Manually changing caret position led to weird highlighting due to
+	 * default anchor at the beginning of the textfield.
+	 */
 	private void initTextFields()
 	{
 		// constants for all textfields
-
 		
 		// Decimal TextField
 		decField = new TextField();
 		decField.setTooltip(new Tooltip("Decimal Input"));
-		/*
-		decField.setOnKeyReleased(e -> 
+		decField.setOnKeyPressed(e -> 
 		{
-			convertInput(Convert.type.Decimal, decField.getText());
-			decField.positionCaret(decField.getText().length());
+			lastInput = Input.decimal;
+			clearFields();
 		});
-		*/
 		gridpane.add(decField, 1, 0);
 		
 		// Binary TextField
 		binField = new TextField();
 		binField.setTooltip(new Tooltip("Binary Input"));
-		/*
-		binField.setOnKeyReleased(e -> 
+		binField.setOnKeyPressed(e -> 
 		{
-			convertInput(Convert.type.Binary, binField.getText());
-			binField.positionCaret(binField.getText().length()+1);
+			lastInput = Input.binary;
+			clearFields();
 		});
-		*/
 		gridpane.add(binField, 1, 1);
 		
 		// Hexadecimal TextField
 		hexField = new TextField();
 		hexField.setTooltip(new Tooltip("Hexadecimal Input"));
-		/*
-		hexField.setOnKeyReleased(e -> 
+		hexField.setOnKeyPressed(e -> 
 			{
-				convertInput(Convert.type.Hexadecimal, hexField.getText());
-				hexField.positionCaret(hexField.getText().length()+1);
+				lastInput = Input.hexadecimal;
+				clearFields();
 			});
-			*/
 		gridpane.add(hexField, 1, 2);
 		
 		// Octal TextField
 		octField = new TextField();
 		octField.setTooltip(new Tooltip("octal input"));
-		/*
-		octField.setOnKeyReleased(e -> 
+		octField.setOnKeyPressed(e -> 
 		{
-			convertInput(Convert.type.Octal, octField.getText());
-			octField.positionCaret(octField.getText().length()+1);
+			lastInput = Input.octal;
+			clearFields();
 		});
-		*/
 		gridpane.add(octField, 1, 3);
 	}
 	
-	
+	/**
+	 * Clears every text field EXCEPT the text field
+	 * that was last typed in. This prevents old
+	 * conversions from showing while a new conversion
+	 * is being entered.
+	 */
+	private void clearFields()
+	{
+		switch (lastInput)
+		{
+			case binary:
+				decField.clear();
+				hexField.clear();
+				octField.clear();
+				break;
+			case hexadecimal:
+				decField.clear();
+				binField.clear();
+				octField.clear();
+				break;
+			case octal:
+				decField.clear();
+				binField.clear();
+				hexField.clear();
+				break;
+			default: // decimal
+				binField.clear();
+				hexField.clear();
+				octField.clear();
+				break;
+		}
+	}
+
 	/**
 	 * Changes the text fields to the converted form of the user-input
 	 */
-	private void convertInput(Convert.type type, String input)
+	private void convertInput()
 	{
+		String input;
+		Convert.type type;
+		
+		switch (lastInput)
+		{
+			case binary:
+				input = binField.getText();
+				type = Convert.type.Binary;
+				break;
+			case hexadecimal:
+				input = hexField.getText();
+				type = Convert.type.Hexadecimal;
+				break;
+			case octal:
+				input = octField.getText();
+				type = Convert.type.Octal;
+				break;
+			default:
+				input = decField.getText();
+				type = Convert.type.Decimal;
+				break;
+		}
+		
 		try
 		{
 			convert = Convert.getInstance();
@@ -166,7 +230,7 @@ public class ConvertWindow extends Application
 				binField.setText(convert.binary);
 				hexField.setText(convert.hexadecimal);
 				octField.setText(convert.octal);
-				showBtn.setDisable(false);
+				showBtn.setDisable(false); // gotta love a double negative
 				errorLbl.setVisible(false);
 			}
 			else	
@@ -182,9 +246,6 @@ public class ConvertWindow extends Application
 		{
 			invalid();
 		}
-		
-		
-		
 	}
 	
 	/**
