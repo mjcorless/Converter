@@ -1,0 +1,90 @@
+@font-face 
+{
+	font-family: 'PT Serif', serif;
+	src: url('/resources/fonts/PT_Serif/PT_Serif-Web-Regular.ttf');
+}
+
+@font-face 
+{	
+	font-family: 'Inconsolata', monospace;
+	src: url('/resources/fonts/Inconsolata/Inconsolata-Bold.ttf');  
+}
+
+@font-face 
+{	
+	font-family: 'Pacifico', cursive;
+	src: url('/resources/fonts/Pacifico/Pacifico-Regular.ttf');  
+}
+
+@font-face 
+{	
+	font-family: 'Dancing Script', cursive;
+	src: url('/resources/fonts/Dancing_Script/DancingScript-Regular.ttf');  
+}
+
+.root
+{
+	-fx-background-color: linear-gradient(#D9DFE2, #5D8397);
+	-fx-font-size: 11pt;
+}
+
+.label
+{
+    -fx-font: 14pt Inconsolata;
+}
+
+.error-label
+{
+	-fx-font: 12pt "PT Serif";
+	-fx-text-fill: red;
+}
+
+.text-field
+{
+	-fx-font: 10pt Tahoma;
+    -fx-font-weight: bold;
+    -fx-faint-focus-color: #000000;
+}
+
+.btn-disabled
+{
+    -fx-opacity: 0;
+}
+
+.showBtn-enable
+{
+	-fx-background-color: 
+        #090a0c,
+        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font: 13 "PT Serif";
+    -fx-text-fill: white;
+    -fx-padding: 10 20 10 20;
+}
+
+
+.clearBtn-enable
+{
+    -fx-background-color: linear-gradient(#ff5400, #be1d00);
+    -fx-font: 14 "PT Serif";
+    -fx-text-fill: white;
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-padding: 3 4 3 4;
+}
+/*
+.clearBtn-disable
+{
+    -fx-background-color: linear-gradient(#ff5400, #be1d00);
+    -fx-font: 14 "PT Serif";
+    -fx-text-fill: white;
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-padding: 4 5 4 5;
+    -fx-opacity: 0;
+}
+*/

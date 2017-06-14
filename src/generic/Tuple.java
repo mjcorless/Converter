@@ -4,6 +4,7 @@ package generic;
  * C# has spoiled me and I wanted to use a tuple
  * but apparently java doesn't have a Tuple class
  * built in so I made my own.
+ * This is used for the results of each conversion.
  * @author Matthew Corless
  *
  * @param <T>

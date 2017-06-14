@@ -39,6 +39,7 @@ public class Decimal
 		}
 		catch(NumberFormatException dec)
 		{
+			//dec.printStackTrace();
 			return false;
 		}
 		return true;

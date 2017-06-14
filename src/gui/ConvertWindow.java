@@ -13,6 +13,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -26,7 +29,7 @@ public class ConvertWindow extends Application
 	private Scene scene;
 	private GridPane gridpane;
 	private TextField decField, binField, octField, hexField;
-	private Button convertBtn, showBtn;
+	private Button showBtn, decClearBtn, binClearBtn, hexClearBtn, octClearBtn;
 	private Label errorLbl;
 	private Convert convert;
 	private Tuple<String, String, String, String> result;
@@ -41,7 +44,6 @@ public class ConvertWindow extends Application
 	private Input lastInput;
 	
 	
-	
 	@Override
 	public void start(Stage primaryStage) throws Exception 
 	{
@@ -51,50 +53,28 @@ public class ConvertWindow extends Application
 		 * I still don't understand how the icons in javafx work. This is from the swing implementation
 		 * where I read to use multiple images so that it would choose the right one for the OS.
 		 * However, if I only add one image, it works on my windows 10 regardless if it is the 16, 32, 
-		 * or 64 pixel version. When I add all three it chooses the 32 pixel version so apparently this
+		 * or 64 pixel version. When I add all three it chooses the 32 pixel version so apparently fx
 		 * still defaults to the appropriate pixel version..
 		 */
 		convertWindow.getIcons().addAll(new Image("/resources/images/calculator64.png"),
 				new Image("/resources/images/calculator32.png"), new Image("/resources/images/calculator64.png"));
-		
-		
-		
-	     gridpane = new GridPane();
-	     /*
-	     for (int i = 0; i < 2; i++) {
-	         ColumnConstraints column = new ColumnConstraints(100);
-	         gridpane.getColumnConstraints().add(column);
-	     }
-	     */
-		
-		
+				
+	    gridpane = new GridPane();	
 		initLabels();
-		initTextFields();
-		
-		errorLbl = new Label();
-		GridPane.setHalignment(errorLbl, HPos.CENTER);
-		gridpane.add(errorLbl, 0, 4, 2, 1);
-		
-		convertBtn = new Button("Convert");
-		GridPane.setHalignment(convertBtn, HPos.CENTER);
-		convertBtn.setOnAction(e -> convertInput());
-		gridpane.add(convertBtn, 0, 5);
-		
-		
-		showBtn = new Button("Show Me!");
-		showBtn.setDisable(true);
-		GridPane.setHalignment(showBtn, HPos.CENTER);
-		gridpane.add(showBtn, 1, 5);
+		initTextFields();		
+		initButtons();
 		
 		
 		gridpane.setAlignment(Pos.CENTER);
-		scene = new Scene(gridpane, 250, 150);
-		//convertBtn.requestFocus();
+		scene = new Scene(gridpane, 320, 200);
+		scene.getStylesheets().add("/resources/css/convert.css");
 		convertWindow.setScene(scene);
 		convertWindow.setResizable(false);
 		convertWindow.show();
 	}
 	
+
+
 	private void initLabels()
 	{
 		Label decLbl = new Label("Decimal");
@@ -105,6 +85,11 @@ public class ConvertWindow extends Application
 		gridpane.add(hexLbl, 0, 2);
 		Label octLbl = new Label("Octal");
 		gridpane.add(octLbl, 0, 3);
+		
+		errorLbl = new Label();
+		errorLbl.getStyleClass().add("error-label");
+		GridPane.setHalignment(errorLbl, HPos.CENTER);
+		gridpane.add(errorLbl, 0, 4, 2, 1);
 	}
 	
 	/**
@@ -121,44 +106,166 @@ public class ConvertWindow extends Application
 		// Decimal TextField
 		decField = new TextField();
 		decField.setTooltip(new Tooltip("Decimal Input"));
-		decField.setOnKeyPressed(e -> 
+		decField.setOnKeyPressed(e ->
 		{
 			lastInput = Input.decimal;
 			clearFields();
+		});
+		decField.setOnKeyReleased(e -> 
+		{
+			lastInput = Input.decimal;
+			
+			enableClearBtn(decClearBtn);
+			disableBtn(binClearBtn);
+			disableBtn(hexClearBtn);
+			disableBtn(octClearBtn);
+			
+			convertInput();
 		});
 		gridpane.add(decField, 1, 0);
 		
 		// Binary TextField
 		binField = new TextField();
 		binField.setTooltip(new Tooltip("Binary Input"));
-		binField.setOnKeyPressed(e -> 
+		binField.setOnKeyPressed(e ->
 		{
 			lastInput = Input.binary;
 			clearFields();
+		});
+		binField.setOnKeyReleased(e -> 
+		{
+			lastInput = Input.binary;
+			
+			enableClearBtn(binClearBtn);
+			disableBtn(decClearBtn);
+			disableBtn(hexClearBtn);
+			disableBtn(octClearBtn);
+			
+			convertInput();
 		});
 		gridpane.add(binField, 1, 1);
 		
 		// Hexadecimal TextField
 		hexField = new TextField();
 		hexField.setTooltip(new Tooltip("Hexadecimal Input"));
-		hexField.setOnKeyPressed(e -> 
-			{
-				lastInput = Input.hexadecimal;
-				clearFields();
-			});
+		hexField.setOnKeyPressed(e ->
+		{
+			lastInput = Input.hexadecimal;
+			clearFields();
+		});
+		hexField.setOnKeyReleased(e -> 
+		{
+			lastInput = Input.hexadecimal;
+			
+			enableClearBtn(hexClearBtn);
+			disableBtn(decClearBtn);
+			disableBtn(binClearBtn);
+			disableBtn(octClearBtn);
+			
+			convertInput();
+		});
 		gridpane.add(hexField, 1, 2);
 		
 		// Octal TextField
 		octField = new TextField();
 		octField.setTooltip(new Tooltip("octal input"));
-		octField.setOnKeyPressed(e -> 
+		octField.setOnKeyPressed(e ->
 		{
 			lastInput = Input.octal;
 			clearFields();
 		});
+		octField.setOnKeyReleased(e -> 
+		{
+			lastInput = Input.octal;
+			
+			enableClearBtn(octClearBtn);
+			disableBtn(decClearBtn);
+			disableBtn(binClearBtn);
+			disableBtn(hexClearBtn);
+			
+			convertInput();
+		});
 		gridpane.add(octField, 1, 3);
 	}
 	
+	private void initButtons()
+	{
+		showBtn = new Button("Show Me!");
+		showBtn.setPrefWidth(105);
+		disableBtn(showBtn);
+		GridPane.setHalignment(showBtn, HPos.CENTER);
+		gridpane.add(showBtn, 0, 5, 3, 1);
+		
+		//VBox vbox = new VBox();
+		
+		decClearBtn = new Button("X");
+		decClearBtn.setOnAction(e -> clearAll());
+		disableBtn(decClearBtn);
+		binClearBtn = new Button("X");
+		binClearBtn.setOnAction(e -> clearAll());
+		disableBtn(binClearBtn);
+		hexClearBtn = new Button("X");
+		hexClearBtn.setOnAction(e -> clearAll());
+		disableBtn(hexClearBtn);
+		octClearBtn = new Button("X");
+		octClearBtn.setOnAction(e -> clearAll());
+		disableBtn(octClearBtn);
+		
+		//vbox.getChildren().addAll(decClearBtn, binClearBtn, hexClearBtn, octClearBtn);
+		//gridpane.add(vbox, 2, 0, 1, 4);
+		gridpane.setHalignment(decClearBtn, HPos.LEFT);
+		gridpane.add(decClearBtn, 2, 0);
+		
+		gridpane.setHalignment(binClearBtn, HPos.LEFT);
+		gridpane.add(binClearBtn, 2, 1);
+		
+		gridpane.setHalignment(hexClearBtn, HPos.LEFT);
+		gridpane.add(hexClearBtn, 2, 2);
+		
+		gridpane.setHalignment(octClearBtn, HPos.LEFT);
+		gridpane.add(octClearBtn, 2, 3);
+	}
+
+	/**
+	 * Disables the button and changes the css
+	 * style of the button to match
+	 * @param btn
+	 */
+	private void disableBtn(Button btn)
+	{
+		btn.getStyleClass().removeAll("showBtn-enable"); // remove method doesnt work (╯°□°）╯︵ 
+		btn.getStyleClass().removeAll("clearBtn-enable");
+		btn.getStyleClass().add("btn-disabled"); 
+		btn.setDisable(true);
+	}
+	
+	/**
+	 * Enables the button and changes the css
+	 * style of the button to match
+	 * @param btn
+	 */
+	private void enableShowBtn()
+	{
+		showBtn.setDisable(false); // gotta love a double negative
+		showBtn.getStyleClass().removeAll("btn-disabled"); // remove method doesnt work (╯°□°）╯︵ 
+		showBtn.getStyleClass().add("showBtn-enable");
+	}
+	
+	/**
+	 * Enables the button and changes the css
+	 * style of the button to match
+	 * @param btn
+	 */
+	private void enableClearBtn(Button btn)
+	{
+		btn.setDisable(false); // gotta love a double negative
+		btn.getStyleClass().removeAll("btn-disabled"); // remove method doesnt work (╯°□°）╯︵ 
+		btn.getStyleClass().add("clearBtn-enable");
+	}
+	
+
+
+
 	/**
 	 * Clears every text field EXCEPT the text field
 	 * that was last typed in. This prevents old
@@ -191,6 +298,25 @@ public class ConvertWindow extends Application
 				break;
 		}
 	}
+	
+	/**
+	 * Clear all text fields
+	 * @return
+	 */
+	private void clearAll()
+	{
+		decField.clear();
+		binField.clear();
+		hexField.clear();
+		octField.clear();
+		
+		disableBtn(decClearBtn);
+		disableBtn(binClearBtn);
+		disableBtn(hexClearBtn);
+		disableBtn(octClearBtn);
+		disableBtn(showBtn);
+		errorLbl.setVisible(false);
+	}
 
 	/**
 	 * Changes the text fields to the converted form of the user-input
@@ -220,54 +346,93 @@ public class ConvertWindow extends Application
 				break;
 		}
 		
-		try
-		{
-			convert = Convert.getInstance();
-			
-			if (convert.convertMe(type, input))
+		// don't try to convert if the field is empty (if the keypressed was the delete key)
+		if (!input.equals(""))
+		{			
+			// **TODO** 6/12/2017
+			// clean this up, cannot set the text field of the one the user types in or else
+			// the cursor moves to the front of the textfield, if you manually move the cursor/caret,
+			// the text gets highlighted and I have not found a way to avoid that
+			try
 			{
-				decField.setText(convert.decimal);
-				binField.setText(convert.binary);
-				hexField.setText(convert.hexadecimal);
-				octField.setText(convert.octal);
-				showBtn.setDisable(false); // gotta love a double negative
-				errorLbl.setVisible(false);
+				convert = Convert.getInstance();
+				
+				if (convert.convertMe(type, input))
+				{
+					switch (lastInput)
+					{
+						case binary:
+							decField.setText(convert.getDecimal());
+							hexField.setText(convert.getHexadecimal());
+							octField.setText(convert.getOctal());
+							break;
+						case hexadecimal:
+							decField.setText(convert.getDecimal());
+							binField.setText(convert.getBinary());
+							octField.setText(convert.getOctal());
+							break;
+						case octal:
+							decField.setText(convert.getDecimal());
+							binField.setText(convert.getBinary());
+							hexField.setText(convert.getHexadecimal());
+							break;
+						default:
+							binField.setText(convert.getBinary());
+							hexField.setText(convert.getHexadecimal());
+							octField.setText(convert.getOctal());
+							break;
+					}
+					enableShowBtn();
+					errorLbl.setVisible(false);
+				}
+				else	
+				{
+					invalid(convert.getError(), false);
+				}
 			}
-			else	
+			catch (NumberFormatException e)
+			{		
+				System.out.println("NumberFormatException in ConvertWindow");
+				//e.printStackTrace();
+				if (lastInput == Input.decimal)
+				{
+					invalid("max decimal value is 2147483647.", true);
+				}
+			}
+			catch (NullPointerException e)
 			{
-				invalid();
+				System.out.println("NullPointerException in ConvertWindow");
+				//e.printStackTrace();
+				//invalid();
 			}
 		}
-		catch (NumberFormatException e)
-		{		
-				invalid("max decimal value is 2147483647.");
-		}
-		catch (NullPointerException e)
+		else // input == ""
 		{
-			invalid();
+			clearAll();
 		}
+		
+
 	}
 	
 	/**
-	 * Creates error message for invalid inputs when attempting to convert
-	 * @param s string that the user attempted to convert
+	 * Creates error message for invalid inputs when attempting to convert.
+	 * 
+	 * @param errorText The error label text.
+	 * @param concatenate True if preceded by 'Invalid input: '. False if
 	 */
-	private void invalid()
+	private void invalid(String errorText, boolean concatenate)
 	{
+		if (concatenate)
+		{
+			errorLbl.setText("Invalid input: " + errorText);
+		}
+		else // custom invalid
+		{
+			errorLbl.setText(errorText);
+		}
 		errorLbl.setVisible(true);
-		errorLbl.setText("Invalid input");
+		disableBtn(showBtn);
 	}
-	
-	/**
-	 * Creates error message for invalid inputs when attempting to convert
-	 * @param s string that the user attempted to convert
-	 */
-	private void invalid(String s)
-	{
-		errorLbl.setVisible(true);
-		errorLbl.setText("Invalid input: " + s);
-	}
-	
 	
 	
 	public static void main(String[] args)

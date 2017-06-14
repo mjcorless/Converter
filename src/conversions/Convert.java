@@ -17,10 +17,11 @@ public class Convert
 	private static Convert instance = null;
 	private Tuple<String, String, String, String> result;
 	
-	public String decimal;
-	public String binary;
-	public String hexadecimal;
-	public String octal;
+	private String decimal;
+	private String binary;
+	private String hexadecimal;
+	private String octal;
+	private String error;
 	
 	
 	// enums
@@ -63,7 +64,9 @@ public class Convert
 						hexadecimal = result._v;
 						octal = result._w;
 						return true;
-					} 
+					}
+					
+					error = "Invalid decimal input.";
 					break;
 				case Binary:
 					Binary bin = new Binary(input);
@@ -76,6 +79,8 @@ public class Convert
 						octal = result._w;
 						return true;
 					} 
+					
+					error = "Invalid binary input.";
 					break;
 				case Hexadecimal:
 					Hexadecimal hex = new Hexadecimal(input);
@@ -88,6 +93,8 @@ public class Convert
 						octal = result._w;
 						return true;
 					} 
+					
+					error = "Invalid hexadecimal input.";
 					break;
 				case Octal:
 					Octal oct = new Octal(input);
@@ -100,9 +107,36 @@ public class Convert
 						octal = result._w;
 						return true;
 					} 
+					
+					error = "Invalid octal input.";
 					break;			
 			}
 		}
 		return false;
+	}
+
+	public String getDecimal()
+	{
+		return decimal;
+	}
+
+	public String getBinary()
+	{
+		return binary;
+	}
+
+	public String getHexadecimal()
+	{
+		return hexadecimal;
+	}
+
+	public String getOctal()
+	{
+		return octal;
+	}
+
+	public String getError()
+	{
+		return error;
 	}
 }
