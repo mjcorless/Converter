@@ -1,20 +1,29 @@
 package gui;
 
 
+
+
 import conversions.*;
 import generic.Tuple;
 import javafx.application.Application;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -29,10 +38,11 @@ public class ConvertWindow extends Application
 	private Scene scene;
 	private GridPane gridpane;
 	private TextField decField, binField, octField, hexField;
-	private Button showBtn, decClearBtn, binClearBtn, hexClearBtn, octClearBtn;
+	private Button showBtn; //, decClearBtn, binClearBtn, hexClearBtn, octClearBtn;
 	private Label errorLbl;
 	private Convert convert;
 	private Tuple<String, String, String, String> result;
+	private Group decClearBtn, binClearBtn, hexClearBtn, octClearBtn;
 	
 	enum Input 
 	{
@@ -64,11 +74,14 @@ public class ConvertWindow extends Application
 		initTextFields();		
 		initButtons();
 		
-		
 		gridpane.setAlignment(Pos.CENTER);
-		scene = new Scene(gridpane, 320, 200);
+		//gridpane.setHgap(5);
+		gridpane.setVgap(2);
+		scene = new Scene(gridpane, 320, 220);
 		scene.getStylesheets().add("/resources/css/convert.css");
 		convertWindow.setScene(scene);
+		//enableShowBtn();
+		showBtn.requestFocus();
 		convertWindow.setResizable(false);
 		convertWindow.show();
 	}
@@ -115,10 +128,10 @@ public class ConvertWindow extends Application
 		{
 			lastInput = Input.decimal;
 			
-			enableClearBtn(decClearBtn);
-			disableBtn(binClearBtn);
-			disableBtn(hexClearBtn);
-			disableBtn(octClearBtn);
+			decClearBtn.setVisible(true);
+			binClearBtn.setVisible(false);
+			hexClearBtn.setVisible(false);
+			octClearBtn.setVisible(false);
 			
 			convertInput();
 		});
@@ -136,10 +149,10 @@ public class ConvertWindow extends Application
 		{
 			lastInput = Input.binary;
 			
-			enableClearBtn(binClearBtn);
-			disableBtn(decClearBtn);
-			disableBtn(hexClearBtn);
-			disableBtn(octClearBtn);
+			decClearBtn.setVisible(false);
+			binClearBtn.setVisible(true);
+			hexClearBtn.setVisible(false);
+			octClearBtn.setVisible(false);
 			
 			convertInput();
 		});
@@ -157,10 +170,10 @@ public class ConvertWindow extends Application
 		{
 			lastInput = Input.hexadecimal;
 			
-			enableClearBtn(hexClearBtn);
-			disableBtn(decClearBtn);
-			disableBtn(binClearBtn);
-			disableBtn(octClearBtn);
+			decClearBtn.setVisible(false);
+			binClearBtn.setVisible(false);
+			hexClearBtn.setVisible(true);
+			octClearBtn.setVisible(false);
 			
 			convertInput();
 		});
@@ -178,10 +191,10 @@ public class ConvertWindow extends Application
 		{
 			lastInput = Input.octal;
 			
-			enableClearBtn(octClearBtn);
-			disableBtn(decClearBtn);
-			disableBtn(binClearBtn);
-			disableBtn(hexClearBtn);
+			decClearBtn.setVisible(false);
+			binClearBtn.setVisible(false);
+			hexClearBtn.setVisible(false);
+			octClearBtn.setVisible(true);
 			
 			convertInput();
 		});
@@ -192,39 +205,81 @@ public class ConvertWindow extends Application
 	{
 		showBtn = new Button("Show Me!");
 		showBtn.setPrefWidth(105);
+		showBtn.getStyleClass().add("showBtn-enable");
 		disableBtn(showBtn);
 		GridPane.setHalignment(showBtn, HPos.CENTER);
 		gridpane.add(showBtn, 0, 5, 3, 1);
 		
-		//VBox vbox = new VBox();
 		
-		decClearBtn = new Button("X");
-		decClearBtn.setOnAction(e -> clearAll());
-		disableBtn(decClearBtn);
-		binClearBtn = new Button("X");
-		binClearBtn.setOnAction(e -> clearAll());
-		disableBtn(binClearBtn);
-		hexClearBtn = new Button("X");
-		hexClearBtn.setOnAction(e -> clearAll());
-		disableBtn(hexClearBtn);
-		octClearBtn = new Button("X");
-		octClearBtn.setOnAction(e -> clearAll());
-		disableBtn(octClearBtn);
+		decClearBtn = getCloseButton();
+		decClearBtn.setOnMouseClicked(e -> clearAll());
+		decClearBtn.setVisible(false);
 		
-		//vbox.getChildren().addAll(decClearBtn, binClearBtn, hexClearBtn, octClearBtn);
-		//gridpane.add(vbox, 2, 0, 1, 4);
-		gridpane.setHalignment(decClearBtn, HPos.LEFT);
-		gridpane.add(decClearBtn, 2, 0);
+		binClearBtn = getCloseButton();
+		binClearBtn.setOnMouseClicked(e -> clearAll());
+		binClearBtn.setVisible(false);
 		
-		gridpane.setHalignment(binClearBtn, HPos.LEFT);
-		gridpane.add(binClearBtn, 2, 1);
+		hexClearBtn = getCloseButton();
+		hexClearBtn.setOnMouseClicked(e -> clearAll());
+		hexClearBtn.setVisible(false);
 		
-		gridpane.setHalignment(hexClearBtn, HPos.LEFT);
-		gridpane.add(hexClearBtn, 2, 2);
+		octClearBtn = getCloseButton();
+		octClearBtn.setOnMouseClicked(e -> clearAll());
+		octClearBtn.setVisible(false);
 		
-		gridpane.setHalignment(octClearBtn, HPos.LEFT);
-		gridpane.add(octClearBtn, 2, 3);
+		gridpane.setHalignment(decClearBtn, HPos.RIGHT);
+		gridpane.add(decClearBtn, 1, 0);
+		GridPane.setMargin(decClearBtn, new Insets(0, 5, 0, 0)); // have a small gap between btn and the border of textfield
+			
+		gridpane.setHalignment(binClearBtn, HPos.RIGHT);
+		gridpane.add(binClearBtn, 1, 1);
+		GridPane.setMargin(binClearBtn, new Insets(0, 5, 0, 0)); // have a small gap between btn and the border of textfield
+		
+		gridpane.setHalignment(hexClearBtn, HPos.RIGHT);
+		gridpane.add(hexClearBtn, 1, 2);
+		GridPane.setMargin(hexClearBtn, new Insets(0, 5, 0, 0)); // have a small gap between btn and the border of textfield
+		
+		gridpane.setHalignment(octClearBtn, HPos.RIGHT);
+		gridpane.add(octClearBtn, 1, 3);
+		GridPane.setMargin(octClearBtn, new Insets(0, 5, 0, 0)); // have a small gap between btn and the border of textfield
 	}
+	
+    private Group getCloseButton() 
+    {
+        Group grp = new Group();
+        final Circle circle = new Circle();
+        circle.setRadius(7.0);
+        final Rectangle r1 = getCard();
+        r1.setRotate(-45);
+        final Rectangle r2 = getCard();
+        r2.setRotate(45);
+        grp.setOnMouseEntered(e -> 
+        {
+        	circle.setFill(Color.web("#097dda"));
+        	r1.setFill(Color.WHITE);
+        	r2.setFill(Color.WHITE);
+        });
+        grp.setOnMouseExited(e ->
+        {
+        	circle.setFill(Color.web("#4c4c4c"));
+        	r1.setFill(Color.web("#868686"));
+        	r2.setFill(Color.web("#868686"));
+        });
+        grp.setVisible(true);
+        circle.setFill(Color.web("#4c4c4c"));
+        grp.getChildren().addAll(circle, r1, r2);
+        return grp;
+    }
+ 
+    private Rectangle getCard() 
+    {
+        Rectangle card = new Rectangle(8, 2);
+        card.setX(-4);
+        card.setY(-1);
+        card.setStrokeWidth(2.0);
+        card.setFill(Color.web("#868686"));   
+        return card;
+    }
 
 	/**
 	 * Disables the button and changes the css
@@ -233,10 +288,14 @@ public class ConvertWindow extends Application
 	 */
 	private void disableBtn(Button btn)
 	{
-		btn.getStyleClass().removeAll("showBtn-enable"); // remove method doesnt work (╯°□°）╯︵ 
-		btn.getStyleClass().removeAll("clearBtn-enable");
 		btn.getStyleClass().add("btn-disabled"); 
-		btn.setDisable(true);
+		
+		Image disabledIcon = new Image("/resources/images/No_Cross.png");
+		ImageView iView = new ImageView(disabledIcon);
+		Tooltip tooltip = new Tooltip("Enter a Valid Input");
+		tooltip.setGraphic(iView);
+		showBtn.setTooltip(tooltip);
+		showBtn.setOnMouseClicked(null);
 	}
 	
 	/**
@@ -246,24 +305,15 @@ public class ConvertWindow extends Application
 	 */
 	private void enableShowBtn()
 	{
-		showBtn.setDisable(false); // gotta love a double negative
+		//showBtn.setDisable(false); // gotta love a double negative
 		showBtn.getStyleClass().removeAll("btn-disabled"); // remove method doesnt work (╯°□°）╯︵ 
 		showBtn.getStyleClass().add("showBtn-enable");
+		showBtn.setTooltip(new Tooltip("See how to do each conversion."));
+		showBtn.setOnMouseClicked(e ->
+		{
+			
+		});
 	}
-	
-	/**
-	 * Enables the button and changes the css
-	 * style of the button to match
-	 * @param btn
-	 */
-	private void enableClearBtn(Button btn)
-	{
-		btn.setDisable(false); // gotta love a double negative
-		btn.getStyleClass().removeAll("btn-disabled"); // remove method doesnt work (╯°□°）╯︵ 
-		btn.getStyleClass().add("clearBtn-enable");
-	}
-	
-
 
 
 	/**
@@ -310,10 +360,10 @@ public class ConvertWindow extends Application
 		hexField.clear();
 		octField.clear();
 		
-		disableBtn(decClearBtn);
-		disableBtn(binClearBtn);
-		disableBtn(hexClearBtn);
-		disableBtn(octClearBtn);
+		decClearBtn.setVisible(false);
+		binClearBtn.setVisible(false);
+		hexClearBtn.setVisible(false);
+		octClearBtn.setVisible(false);
 		disableBtn(showBtn);
 		errorLbl.setVisible(false);
 	}

@@ -41,14 +41,26 @@
 
 .text-field
 {
+	-fx-background-insets: 2;
+	-fx-padding: 8;
 	-fx-font: 10pt Tahoma;
     -fx-font-weight: bold;
-    -fx-faint-focus-color: #000000;
+    -fx-border-width: 1px;
+    -fx-border-color: #38424b;
+}
+
+.text-field:focused 
+{
+	-fx-background-insets: 0;
+	-fx-padding: 5;
+	-fx-faint-focus-color: black;
+	-fx-border-width: 3px;
+    -fx-border-color: #38424b;
 }
 
 .btn-disabled
 {
-    -fx-opacity: 0;
+    -fx-opacity: 0.1;
 }
 
 .showBtn-enable
@@ -66,7 +78,16 @@
     -fx-padding: 10 20 10 20;
 }
 
+.tooltip
+{
+	-fx-text-fill: white;
+    -fx-background-insets: 0;
+    -fx-padding: 0 5 0 0;
+    -fx-background: #38424b;
+    -fx-text-fill: white;
+}
 
+/*
 .clearBtn-enable
 {
     -fx-background-color: linear-gradient(#ff5400, #be1d00);
@@ -76,7 +97,7 @@
     -fx-background-radius: 3,2,2,2;
     -fx-padding: 3 4 3 4;
 }
-/*
+
 .clearBtn-disable
 {
     -fx-background-color: linear-gradient(#ff5400, #be1d00);
