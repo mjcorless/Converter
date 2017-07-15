@@ -1,69 +1,132 @@
 package conversions;
 
-public class Decimal
+public class Decimal extends Numerical
 {
-	private String Output = "";
-	private  int input;
-	String s;
-	
+	private String decimal;
+
 	public Decimal(String input)
 	{
-		s = input;
-	}
-	
-	private String DecimalToDecimal()
-	{
-		return s;
+		decimal = input;
 	}
 
-	private String DecimalToBinary()
+	@Override
+	public String getDecimal()
 	{
-		return Integer.toBinaryString(Integer.parseInt(s));
+		return decimal;
 	}
 
-	private String DecimalToHex()
+	@Override
+	public String getBinary()
 	{
-		return Integer.toHexString(Integer.parseInt(s));
+		return Integer.toBinaryString(Integer.parseInt(decimal));
 	}
 
-	private String DecimalToASCII()
+	@Override
+	public String getHex()
 	{
-		input = Integer.parseInt(s);
-		if(input < 128)
+		return Integer.toHexString(Integer.parseInt(decimal));
+	}
+
+	@Override
+	public String getOctal()
+	{
+		return Integer.toOctalString(Integer.parseInt(decimal));
+	}
+
+	@Override
+	public String showMeToDecimal()
+	{
+		return "<b>" + decimal + "</b>";
+	}
+
+	@Override
+	public String showMeToBinary()
+	{
+		StringBuilder sb = new StringBuilder("<b>" + decimal + " to Binary:</b>");
+		sb.append("<br>------------------------------");
+		StringBuilder result = new StringBuilder();
+		int temp = Integer.parseInt(decimal);
+		int remainder = 0;
+
+		while (temp > 0)
 		{
-			char temp = (char) input;
-			Output = Character.toString(temp);
+			sb.append("<br>divide by 2");
+			sb.append("<br>------------------------------");
+			temp = temp / 2;
+			remainder = temp % 2;
+			result.append(remainder);
+			sb.append("<br>Result: " + temp + "\tRemainder: " + remainder);
+			sb.append("<br>------------------------------");
 		}
-		else
-			Output = "Cannot convert above 127";
-		return Output;
+
+		sb.append("<br>Final answer: " + result.reverse().toString());
+
+		return sb.toString();
 	}
 
-	private String DecimalToOctal()
+	@Override
+	public String showMeToHexadecimal()
 	{
-		return Integer.toOctalString(Integer.parseInt(s));
+		StringBuilder sb = new StringBuilder("<b>" + decimal + " to Hexadecimal:</b>");
+		sb.append("<br>------------------------------");
+		StringBuilder result = new StringBuilder();
+		int temp = Integer.parseInt(decimal);
+		int remainder = 0;
+
+		while (temp > 0)
+		{
+			sb.append("<br>divide by 16");
+			sb.append("<br>------------------------------");
+			remainder = temp % 16;
+			temp = temp / 16;
+			result.append(Integer.toHexString(remainder));
+			sb.append("<br>Result: " + temp + "\tRemainder: " + remainder + " (Hex: "
+					+ Integer.toHexString(remainder) + ")");
+			sb.append("<br>------------------------------");
+		}
+
+		sb.append("<br>Final answer: " + result.reverse().toString());
+
+		return sb.toString();
 	}
 
-	public boolean isValid(String text)
+	@Override
+	public String showMeToOctal()
+	{
+		StringBuilder sb = new StringBuilder("<b>" + decimal + " to Octal:</b>");
+		sb.append("<br>------------------------------");
+		StringBuilder result = new StringBuilder();
+		int temp = Integer.parseInt(decimal);
+		int remainder = 0;
+
+		while (temp > 0)
+		{
+			sb.append("<br>divide by 8");
+			sb.append("<br>------------------------------");
+			remainder = temp % 8;
+			temp = temp / 8;
+			result.append(Integer.toHexString(remainder));
+			sb.append("<br>Result: " + temp + "\tRemainder: " + remainder);
+			sb.append("<br>------------------------------");
+		}
+
+		sb.append("<br>Final answer: " + result.reverse().toString());
+
+		return sb.toString();
+	}
+
+	@Override
+	public boolean isValid()
 	{
 		try
 		{
-			input = Integer.parseInt(text);
+			Integer.parseInt(decimal);
 		}
-		catch(NumberFormatException dec)
+		catch (NumberFormatException dec)
 		{
+			// dec.printStackTrace();
 			return false;
 		}
 		return true;
 	}
-	
-	public String[] convertDecimal()
-	{
-		String[] result = new String[4];
-		result[0] = DecimalToBinary();
-		result[1] = DecimalToHex();
-		result[2] = DecimalToOctal();
-		return result;
-	}
-	
 }
