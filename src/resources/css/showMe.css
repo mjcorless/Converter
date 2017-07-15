@@ -1,0 +1,103 @@
+@font-face 
+{
+	font-family: 'Inconsolata', monospace;
+	src: url('/resources/fonts/Inconsolata/Inconsolata-Bold.ttf');
+}
+
+@font-face 
+{
+	font-family: 'PT Serif', serif;
+	src: url('/resources/fonts/PT_Serif/PT_Serif-Web-Bold.ttf');
+}
+
+.root 
+{
+	-fx-background-color: #9FB8C5;
+	-fx-font: 12pt 'Inconsolata';
+}
+
+.label 
+{
+	-fx-font: 14pt 'PT Serif';
+}
+
+.button
+{
+   	-fx-background-color: 
+        #090a0c,
+        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font: 14 "PT Serif";
+    -fx-text-fill: white;
+    
+    -fx-padding: 8 15 15 15;
+    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+}
+.button:hover 
+{
+	-fx-opacity: 0.7;
+	-fx-cursor: hand;
+}
+.button:pressed 
+{
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+.button:disabled
+{
+    -fx-opacity: 0.1;
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+
+.text-area
+{
+	-fx-control-inner-background:  #9FB8C5;
+    -fx-background-color: #9FB8C5;
+    -fx-focus-color: #9FB8C5;
+}
+.text-area *.text 
+{
+   /* -fx-text-alignment: center;*/
+}
+.text-area:focused, .text-area .content, .text-area:focused .content 
+{
+    -fx-highlight-fill: #9FB8C5;
+    -fx-background-color: #9FB8C5;
+}
+
+.text-area .scroll-bar .increment-button, .text-area .scroll-bar .decrement-button
+{
+    -fx-background-color: #86A7BB;
+    -fx-padding: 5 5 5 5;
+    -fx-background-insets: 0, 0 0 2 0, 0 0 2 0, 0 0 2 0;
+}
+
+.text-area .scroll-bar .decrement-button:hover,  .text-area .scroll-bar .increment-button:hover, .text-area .scroll-bar .thumb:hover  
+{
+	-fx-opacity: 0.8;
+	-fx-cursor: hand;
+}
+.text-area .scroll-bar .decrement-button:pressed, .text-area .scroll-bar .increment-button:pressed 
+{
+    -fx-padding: 7 5 3 5; 
+    -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 0 0, 2 0 0 0;
+}
+
+.text-area .scroll-bar .thumb 
+{
+    -fx-background-color: #9FB8C5;
+}
+
+.text-area .scroll-bar .track 
+{
+    -fx-background-color: #5D8397;
+}
+
+
+
+

@@ -1,25 +1,13 @@
 @font-face 
-{
-	font-family: 'PT Serif', serif;
-	src: url('/resources/fonts/PT_Serif/PT_Serif-Web-Regular.ttf');
-}
-
-@font-face 
 {	
 	font-family: 'Inconsolata', monospace;
 	src: url('/resources/fonts/Inconsolata/Inconsolata-Bold.ttf');  
 }
 
 @font-face 
-{	
-	font-family: 'Pacifico', cursive;
-	src: url('/resources/fonts/Pacifico/Pacifico-Regular.ttf');  
-}
-
-@font-face 
-{	
-	font-family: 'Dancing Script', cursive;
-	src: url('/resources/fonts/Dancing_Script/DancingScript-Regular.ttf');  
+{
+	font-family: 'PT Serif', serif;
+	src: url('/resources/fonts/PT_Serif/PT_Serif-Web-Bold.ttf');
 }
 
 .root
@@ -58,12 +46,7 @@
     -fx-border-color: #38424b;
 }
 
-.btn-disabled
-{
-    -fx-opacity: 0.1;
-}
-
-.showBtn-enable
+.button
 {
 	-fx-background-color: 
         #090a0c,
@@ -73,39 +56,32 @@
     -fx-background-radius: 5,4,3,5;
     -fx-background-insets: 0,1,2,0;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
-    -fx-font: 13 "PT Serif";
+    -fx-font: 14 "PT Serif";
     -fx-text-fill: white;
-    -fx-padding: 10 20 10 20;
+    
+    -fx-padding: 8 15 15 15;
+    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+}
+.button:hover 
+{
+	-fx-opacity: 0.7;
+	-fx-cursor: hand;
+}
+.button:disabled
+{
+    -fx-opacity: 0.1;
+}
+.button:pressed 
+{
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
 }
 
 .tooltip
 {
 	-fx-text-fill: white;
     -fx-background-insets: 0;
-    -fx-padding: 0 5 0 0;
+    -fx-padding: 5 5 5 5;
     -fx-background: #38424b;
     -fx-text-fill: white;
 }
-
-/*
-.clearBtn-enable
-{
-    -fx-background-color: linear-gradient(#ff5400, #be1d00);
-    -fx-font: 14 "PT Serif";
-    -fx-text-fill: white;
-    -fx-background-insets: 0,1,2,3;
-    -fx-background-radius: 3,2,2,2;
-    -fx-padding: 3 4 3 4;
-}
-
-.clearBtn-disable
-{
-    -fx-background-color: linear-gradient(#ff5400, #be1d00);
-    -fx-font: 14 "PT Serif";
-    -fx-text-fill: white;
-    -fx-background-insets: 0,1,2,3;
-    -fx-background-radius: 3,2,2,2;
-    -fx-padding: 4 5 4 5;
-    -fx-opacity: 0;
-}
-*/
