@@ -8,16 +8,29 @@ Simple Java GUI that converts inputs from/to Binary, Decimal, Hexadecimal, and O
 
 ## Instructions
 * If you have maven:
-  1.	$ mvn package
-  2. 	'java -jar target/Converter-1.0-SNAPSHOT-jar-with-dependencies.jar' in order to run the built jar file.
+  1. In the app's directory:
+   ```
+   $ mvn package
+   ``` 
+  2. Now run the executable jar file:
+  ```
+  java -jar target/Converter-1.0-SNAPSHOT-jar-with-dependencies.jar' in order to run the built jar file.
+  ``` 
   
 * Otherwise use the wrapper:
-  1. 	``` Linux
-		$ ./mvnw package
-		```
-		or
-		``` Windows
-		$ ./mvnw.cmd package
-		```
-  2. 'java -jar target/Converter-1.0-SNAPSHOT-jar-with-dependencies.jar' in order to run the built jar file.
+  1. In the app's directory:	
+  
+  Linux:
+  ```
+  $ ./mvnw package
+  ```
+   or Windows:
+  ``` 
+  $ ./mvnw.cmd package
+  ```
+  2. Now run the executable jar file:
+  ``` 
+  java -jar target/Converter-1.0-SNAPSHOT-jar-with-dependencies.jar
+  ```
+ 	
 
