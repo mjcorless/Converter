@@ -2,13 +2,13 @@ package gui;
 
 import conversions.Result;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -35,28 +35,24 @@ public class ShowMeWindow extends Stage
 
 		gridpane = new GridPane();
 
-		// swing label for html content
-		Label inputLabel = new Label(
-				ConvertWindow.getLastInputType().toString() + " Input: " + ConvertWindow.getInput());
-		gridpane.add(inputLabel, 0, 0, 4, 1);
-		GridPane.setHalignment(inputLabel, HPos.CENTER);
+		Label inputLabel = new Label(ConvertWindow.getLastInputType().toString() + " Input: " + input);
 
 		view = new WebView();
 		engine = view.getEngine();
-		engine.loadContent(String.format(
-				"<body bgcolor=\"#9FB8C5\" ><div style=\"text-align:center\" valign=\"center\">%s</div></body>",
+		engine.loadContent(String.format("<body><div style=\"text-align:center\" valign=\"center\">%s</div></body>",
 				inputLabel.getText()));
-		//view.setPrefHeight(440);
-		//view.setPrefWidth(450);
-		gridpane.add(initTabs(), 0, 1, 4, 1);
+		engine.setUserStyleSheetLocation(getClass().getResource("/resources/css/webview.css").toString());
 
-		gridpane.add(view, 0, 2, 4, 1);
-		GridPane.setHalignment(view, HPos.CENTER);
-
-		gridpane.setAlignment(Pos.TOP_CENTER);
 		gridpane.setHgap(5);
 		gridpane.setVgap(10);
+		initTabs();
+		gridpane.add(inputLabel, 0, 0, 4, 1);
+		gridpane.add(view, 0, 2, 4, 1);
+		GridPane.setHalignment(inputLabel, HPos.CENTER);
+		GridPane.setHalignment(view, HPos.CENTER);
+
 		Scene scene = new Scene(gridpane, 550, 550);
+
 		scene.getStylesheets().add("/resources/css/showMe.css");
 		this.setScene(scene);
 
@@ -96,70 +92,83 @@ public class ShowMeWindow extends Stage
 		this.show();
 	}
 
-	private HBox initTabs()
+	/**
+	 * Initialize buttons to switch between each conversion type.
+	 */
+	private void initTabs()
 	{
-		HBox hbox = new HBox();
-		hbox.setSpacing(10);
+		ConvertWindow.InputType[] enumArray = ConvertWindow.InputType.values();
 
-		// Convert convert = Convert.getInstance();
-
-		Button toDecimalBtn = new Button("To Decimal");
-		toDecimalBtn.setOnMouseClicked(e ->
+		// Create a button for every possible input type
+		for (int column = 0; column < enumArray.length; column++)
 		{
-			showConversion(result.getShowDecimal());
+			// set columns to resize as window gets resized
+			ColumnConstraints cc = new ColumnConstraints();
+			cc.setFillWidth(true);
+			cc.setHgrow(Priority.ALWAYS);
+			gridpane.getColumnConstraints().add(cc);
+
+			// create buttons based on possible conversion types
+			Button button = createButton(enumArray[column].toString());
+			// disable button if the input type is the enum this button is for
+			if (enumArray[column] == ConvertWindow.getLastInputType())
+			{
+				button.setDisable(true);
+				showConversion(enumArray[column].toString());
+			}
+
+			// add button and center it inside its column
+			gridpane.add(button, column, 1);
+			GridPane.setHalignment(button, HPos.CENTER);
+		}
+	}
+
+	/**
+	 * Creates and returns a button with the text 'To' plus the string given in the
+	 * parameter. Sets the onMouseClick call showConversion() with the string as the
+	 * parameter.
+	 * 
+	 * @param string
+	 * @return
+	 */
+	private Button createButton(String string)
+	{
+		Button button = new Button("To " + string);
+		button.setOnMouseClicked(e ->
+		{
+			showConversion(string);
 		});
 
-		Button toBinaryBtn = new Button("To Binary");
-		toBinaryBtn.setOnMouseClicked(e ->
-		{
-			showConversion(result.getShowBinary());
-		});
+		return button;
+	}
 
-		Button toHexadecimalBtn = new Button("To Hexadecimal");
-		toHexadecimalBtn.setOnMouseClicked(e ->
+	/**
+	 * Converts the string parameter to a ConvertWindow.InputType enum. Then sets the
+	 * webview content to the conversion from the user input to that enum.
+	 * 
+	 * @param type
+	 */
+	private void showConversion(String type)
+	{
+		String msg = "";
+		switch (ConvertWindow.InputType.valueOf(type))
 		{
-			showConversion(result.getShowHexadecimal());
-		});
-
-		Button toOctalBtn = new Button("To Octal");
-		toOctalBtn.setOnMouseClicked(e ->
-		{
-			showConversion(result.getShowOctal());
-		});
-
-		hbox.getChildren().addAll(toDecimalBtn, toBinaryBtn, toHexadecimalBtn, toOctalBtn);
-
-		switch (ConvertWindow.getLastInputType())
-		{
-			// disable the button for conversion to input
-			// show that conversion as default webview
 			case Decimal:
-				toDecimalBtn.setDisable(true);
-				showConversion(result.getShowDecimal());
+				msg = result.getShowDecimal();
 				break;
 			case Binary:
-				toBinaryBtn.setDisable(true);
-				showConversion(result.getShowBinary());
+				msg = result.getShowBinary();
 				break;
 			case Hexadecimal:
-				toHexadecimalBtn.setDisable(true);
-				showConversion(result.getShowHexadecimal());
+				msg = result.getShowHexadecimal();
 				break;
 			case Octal:
-				toOctalBtn.setDisable(true);
-				showConversion(result.getShowOctal());
+				msg = result.getShowOctal();
 				break;
 		}
 
-		return hbox;
-	}
-
-	private void showConversion(String msg)
-	{
-		// Document doc = engine.getDocument();
-		// Element el = doc.getElementById("content");
-		// String s = el.getTextContent();
-		engine.loadContent(String.format("<body bgcolor=\"#9FB8C5\"><div id='content'>%s</div></body>", msg));
-		// el.setTextContent(msg);
+		// put the conversion inside of the an HTML <body> and <p> so that
+		// it can be formatted in CSS.
+		engine.loadContent(String.format("<body><p>%s</p></body>", msg));
 	}
 }

@@ -12,7 +12,7 @@
 
 .root 
 {
-	-fx-background-color: #9FB8C5;
+	-fx-background-color: #7AAAC1;
 	-fx-font: 12pt 'Inconsolata';
 }
 
@@ -52,50 +52,6 @@
     -fx-opacity: 0.1;
     -fx-padding: 10 15 13 15;
     -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
-}
-
-.text-area
-{
-	-fx-control-inner-background:  #9FB8C5;
-    -fx-background-color: #9FB8C5;
-    -fx-focus-color: #9FB8C5;
-}
-.text-area *.text 
-{
-   /* -fx-text-alignment: center;*/
-}
-.text-area:focused, .text-area .content, .text-area:focused .content 
-{
-    -fx-highlight-fill: #9FB8C5;
-    -fx-background-color: #9FB8C5;
-}
-
-.text-area .scroll-bar .increment-button, .text-area .scroll-bar .decrement-button
-{
-    -fx-background-color: #86A7BB;
-    -fx-padding: 5 5 5 5;
-    -fx-background-insets: 0, 0 0 2 0, 0 0 2 0, 0 0 2 0;
-}
-
-.text-area .scroll-bar .decrement-button:hover,  .text-area .scroll-bar .increment-button:hover, .text-area .scroll-bar .thumb:hover  
-{
-	-fx-opacity: 0.8;
-	-fx-cursor: hand;
-}
-.text-area .scroll-bar .decrement-button:pressed, .text-area .scroll-bar .increment-button:pressed 
-{
-    -fx-padding: 7 5 3 5; 
-    -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 0 0, 2 0 0 0;
-}
-
-.text-area .scroll-bar .thumb 
-{
-    -fx-background-color: #9FB8C5;
-}
-
-.text-area .scroll-bar .track 
-{
-    -fx-background-color: #5D8397;
 }
 
 
