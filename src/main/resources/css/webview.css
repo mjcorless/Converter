@@ -1,0 +1,35 @@
+/*webview.css controls the css for the webview inside of ShowMe window. */
+body 
+{
+    background-color: #7AAAC1;
+    font-family: Arial, Helvetica, san-serif;
+    text-align: center
+}
+
+
+/* Scrollbar for webview */
+::-webkit-scrollbar 
+{
+    width: 14px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track 
+{
+    border-radius: 10px;
+    background: #9FB8C5;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb 
+{
+    
+    border-radius: 10px;
+    background: #5D8397; 
+}
+
+/* handle mouse-over, changing cursor to hand doesn't work here :/ */
+::-webkit-scrollbar-thumb:hover
+{ 
+	opacity: 0.7;
+}

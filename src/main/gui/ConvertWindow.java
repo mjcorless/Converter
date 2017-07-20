@@ -16,7 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -30,8 +29,6 @@ import javafx.stage.Stage;
  */
 public class ConvertWindow extends Stage
 {
-	// protected Stage convertWindow;
-	// private Scene scene;
 	private GridPane gridpane;
 	private TextField decField, binField, octField, hexField;
 	private Button showBtn;
@@ -39,11 +36,13 @@ public class ConvertWindow extends Stage
 	private Label errorLbl;
 	private Group decClearBtn, binClearBtn, hexClearBtn, octClearBtn;
 
+	// the possible types of enums
 	public enum InputType
 	{
 		Decimal, Binary, Hexadecimal, Octal;
 	}
 
+	// the type of input to convert
 	public static InputType getLastInputType()
 	{
 		return lastInput;
@@ -51,13 +50,11 @@ public class ConvertWindow extends Stage
 
 	private static InputType lastInput;
 
-	public static String getInput()
-	{
-		return input;
-	}
+	private String input;
 
-	private static String input;
-
+	/**
+	 * Initialize the Converter Stage.
+	 */
 	public ConvertWindow()
 	{
 		this.setTitle("Converter");
@@ -79,17 +76,17 @@ public class ConvertWindow extends Stage
 		initButtons();
 
 		gridpane.setAlignment(Pos.CENTER);
-		// gridpane.setHgap(5);
-		gridpane.setVgap(2);
+		gridpane.setVgap(3);
 		Scene scene = new Scene(gridpane, 320, 220);
 		scene.getStylesheets().add("/resources/css/convert.css");
 		this.setScene(scene);
-		// enableShowBtn();
-		// showBtn.requestFocus();
 		this.setResizable(false);
 		this.show();
 	}
 
+	/**
+	 * Create Labels and add them to the GridPane
+	 */
 	private void initLabels()
 	{
 		Label decLbl = new Label("Decimal");
@@ -108,101 +105,58 @@ public class ConvertWindow extends Stage
 	}
 
 	/**
-	 * Initialize the text fields and their action listeners. 6/4/2017 note: Dynamically
-	 * updating the conversions when something was entered led to issues with the position
-	 * caret. Manually changing caret position led to weird highlighting due to default
-	 * anchor at the beginning of the textfield.
+	 * Initialize the text fields and their action listeners.
 	 */
 	private void initTextFields()
 	{
-		// constants for all textfields
+		InputType[] enumArray = InputType.values();
+		TextField[] textArray = new TextField[enumArray.length];
+		// Create a button for every possible input type
+		for (int row = 0; row < enumArray.length; row++)
+		{
+			// create textfields based on possible conversion types
+			textArray[row] = createTextField(enumArray[row]);
 
-		// Decimal TextField
-		decField = new TextField();
-		decField.setTooltip(new Tooltip("Decimal Input"));
-		decField.setOnKeyPressed(e ->
+			// add button and center it inside its column
+			gridpane.add(textArray[row], 1, row);
+		}
+
+		// be able to call each textfield directly without having to use the array index
+		decField = textArray[0];
+		binField = textArray[1];
+		hexField = textArray[2];
+		octField = textArray[3];
+	}
+
+	/**
+	 * Creates the textfield for the given InputType. Sets the textfield's OnKeyPress and
+	 * TextProperty Change Events
+	 * 
+	 * @param inputType
+	 * @return
+	 */
+	private TextField createTextField(InputType inputType)
+	{
+		TextField textField = new TextField();
+		textField.setTooltip(new Tooltip(String.format("%s Input", inputType.toString())));
+		// when key is pressed, before the key is entered into textfield
+		textField.setOnKeyPressed(e ->
 		{
-			lastInput = InputType.Decimal;
+			lastInput = inputType;
 		});
-		decField.textProperty().addListener((observable, oldText, newText) ->
+		// when textfield's text changes
+		textField.textProperty().addListener((observable, oldText, newText) ->
 		{
-			if (lastInput == InputType.Decimal)
+			// prevent other textfields getting their text set from causing a stackoverflow
+			// only textfield user is typing into should call convertInput
+			if (lastInput == inputType)
 			{
-				decClearBtn.setVisible(true);
-				binClearBtn.setVisible(false);
-				hexClearBtn.setVisible(false);
-				octClearBtn.setVisible(false);
 				clearFields();
 				convertInput();
 			}
 		});
-		gridpane.add(decField, 1, 0);
 
-		// Binary TextField
-		binField = new TextField();
-		binField.setTooltip(new Tooltip("Binary Input"));
-		binField.setOnKeyPressed(e ->
-		{
-			lastInput = InputType.Binary;
-		});
-		binField.textProperty().addListener((observable, oldText, newText) ->
-		{
-			if (lastInput == InputType.Binary)
-			{
-				decClearBtn.setVisible(false);
-				binClearBtn.setVisible(true);
-				hexClearBtn.setVisible(false);
-				octClearBtn.setVisible(false);
-				clearFields();
-				convertInput();
-			}
-		});
-		gridpane.add(binField, 1, 1);
-
-		// Hexadecimal TextField
-		hexField = new TextField();
-		hexField.setTooltip(new Tooltip("Hexadecimal Input"));
-		hexField.setOnKeyPressed(e ->
-		{
-			lastInput = InputType.Hexadecimal;
-		});
-		hexField.textProperty().addListener((observable, oldText, newText) ->
-		{
-			if (lastInput == InputType.Hexadecimal)
-			{
-				decClearBtn.setVisible(false);
-				binClearBtn.setVisible(false);
-				hexClearBtn.setVisible(true);
-				octClearBtn.setVisible(false);
-				clearFields();
-				convertInput();
-			}
-		});
-		gridpane.add(hexField, 1, 2);
-
-		// Octal TextField
-		octField = new TextField();
-		octField.setTooltip(new Tooltip("Octal Input"));
-		octField.setOnKeyPressed(e ->
-		{
-			lastInput = InputType.Octal;
-		});
-		octField.textProperty().addListener((observable, oldText, newText) ->
-		{
-			if (lastInput == InputType.Octal)
-			{
-				decClearBtn.setVisible(false);
-				binClearBtn.setVisible(false);
-				hexClearBtn.setVisible(false);
-				octClearBtn.setVisible(true);
-
-				clearFields();
-
-				convertInput();
-			}
-		});
-		gridpane.add(octField, 1, 3);
-
+		return textField;
 	}
 
 	/**
@@ -213,45 +167,39 @@ public class ConvertWindow extends Stage
 		showBtn = new Button("Show Me!");
 		showBtn.setPrefWidth(105);
 		showBtn.getStyleClass().add("showBtn-enable");
-		disableShowBtn();
+		showBtn.setDisable(true);
+		showBtn.setTooltip(new Tooltip("See how to do each conversion."));
+		showBtn.setOnMouseClicked(e ->
+		{
+			ShowMeWindow showMeStage = new ShowMeWindow();
+			showMeStage.start(input, result);
+		});
+
 		GridPane.setHalignment(showBtn, HPos.CENTER);
 		gridpane.add(showBtn, 0, 5, 3, 1);
 
-		decClearBtn = getClearButton();
-		decClearBtn.setOnMouseClicked(e -> clearAll());
-		decClearBtn.setVisible(false);
+		// use array to easily iterate through the for loop
+		Group[] tempGrpArray = new Group[InputType.values().length];
 
-		binClearBtn = getClearButton();
-		binClearBtn.setOnMouseClicked(e -> clearAll());
-		binClearBtn.setVisible(false);
+		for (int row = 0; row < tempGrpArray.length; row++)
+		{
+			tempGrpArray[row] = getClearButton();
+			tempGrpArray[row].setOnMouseClicked(e -> clearAll());
+			tempGrpArray[row].setVisible(false);
 
-		hexClearBtn = getClearButton();
-		hexClearBtn.setOnMouseClicked(e -> clearAll());
-		hexClearBtn.setVisible(false);
+			GridPane.setHalignment(tempGrpArray[row], HPos.RIGHT);
+			gridpane.add(tempGrpArray[row], 1, row);
+			// have a small gap between btn and the border of textfield
+			GridPane.setMargin(tempGrpArray[row], new Insets(0, 5, 0, 0));
+		}
 
-		octClearBtn = getClearButton();
-		octClearBtn.setOnMouseClicked(e -> clearAll());
-		octClearBtn.setVisible(false);
-
-		GridPane.setHalignment(decClearBtn, HPos.RIGHT);
-		gridpane.add(decClearBtn, 1, 0);
-		// have a small gap between btn and the border of textfield
-		GridPane.setMargin(decClearBtn, new Insets(0, 5, 0, 0));
-
-		GridPane.setHalignment(binClearBtn, HPos.RIGHT);
-		gridpane.add(binClearBtn, 1, 1);
-		// have a small gap between btn and the border of textfield
-		GridPane.setMargin(binClearBtn, new Insets(0, 5, 0, 0));
-
-		GridPane.setHalignment(hexClearBtn, HPos.RIGHT);
-		gridpane.add(hexClearBtn, 1, 2);
-		// have a small gap between btn and the border of textfield
-		GridPane.setMargin(hexClearBtn, new Insets(0, 5, 0, 0));
-
-		GridPane.setHalignment(octClearBtn, HPos.RIGHT);
-		gridpane.add(octClearBtn, 1, 3);
-		// have a small gap between btn and the border of textfield
-		GridPane.setMargin(octClearBtn, new Insets(0, 5, 0, 0));
+		// be able to call these without using an array index throughout the class
+		// cant initialzie array with the 4 group buttons because the group
+		// buttons will still be uninitialized
+		decClearBtn = tempGrpArray[0];
+		binClearBtn = tempGrpArray[1];
+		hexClearBtn = tempGrpArray[2];
+		octClearBtn = tempGrpArray[3];
 	}
 
 	/**
@@ -271,7 +219,7 @@ public class ConvertWindow extends Stage
 		r2.setRotate(45);
 		grp.setOnMouseEntered(e ->
 		{
-			circle.setFill(Color.web("#097dda"));
+			circle.setFill(Color.web("#366E9B"));
 			r1.setFill(Color.WHITE);
 			r2.setFill(Color.WHITE);
 		});
@@ -303,40 +251,6 @@ public class ConvertWindow extends Stage
 	}
 
 	/**
-	 * Disables the button and changes the css style of the button to match. This is
-	 * similar to showBtn.setDisable(true) but allows for tooltips and custom css.
-	 * 
-	 * @param btn
-	 */
-	private void disableShowBtn()
-	{
-		showBtn.setDisable(true);
-		Image disabledIcon = new Image("/resources/images/No_Cross.png");
-		ImageView iView = new ImageView(disabledIcon);
-		Tooltip tooltip = new Tooltip("Enter a Valid Input");
-		tooltip.setGraphic(iView);
-		showBtn.setTooltip(tooltip);
-		showBtn.setOnMouseClicked(null);
-	}
-
-	/**
-	 * Changes the css style, tooltip and onClick. Acts as showBtn.setDisable(false); but
-	 * allows for css and tooltip change.
-	 * 
-	 * @param btn
-	 */
-	private void enableShowBtn()
-	{
-		showBtn.setDisable(false); // gotta love a double negative
-		showBtn.setTooltip(new Tooltip("See how to do each conversion."));
-		showBtn.setOnMouseClicked(e ->
-		{
-			ShowMeWindow showMeStage = new ShowMeWindow();
-			showMeStage.start(input, result);
-		});
-	}
-
-	/**
 	 * Clears every text field EXCEPT the text field that was last typed in. This prevents
 	 * old conversions from showing while a new conversion is being entered. This also
 	 * clears the error label when the character giving the error was deleted.
@@ -344,24 +258,34 @@ public class ConvertWindow extends Stage
 	private void clearFields()
 	{
 		errorLbl.setVisible(false);
+		decClearBtn.setVisible(false);
+		binClearBtn.setVisible(false);
+		hexClearBtn.setVisible(false);
+		octClearBtn.setVisible(false);
+
+		// don't clear the textflield the user has typed in
 		switch (lastInput)
 		{
 			case Binary:
+				binClearBtn.setVisible(true);
 				decField.clear();
 				hexField.clear();
 				octField.clear();
 				break;
 			case Hexadecimal:
+				hexClearBtn.setVisible(true);
 				decField.clear();
 				binField.clear();
 				octField.clear();
 				break;
 			case Octal:
+				octClearBtn.setVisible(true);
 				decField.clear();
 				binField.clear();
 				hexField.clear();
 				break;
 			default: // decimal
+				decClearBtn.setVisible(true);
 				binField.clear();
 				hexField.clear();
 				octField.clear();
@@ -370,7 +294,7 @@ public class ConvertWindow extends Stage
 	}
 
 	/**
-	 * Clear all text fields
+	 * Clear all text fields, clear buttons, and error label.
 	 * 
 	 * @return
 	 */
@@ -380,12 +304,11 @@ public class ConvertWindow extends Stage
 		binField.clear();
 		hexField.clear();
 		octField.clear();
-
 		decClearBtn.setVisible(false);
 		binClearBtn.setVisible(false);
 		hexClearBtn.setVisible(false);
 		octClearBtn.setVisible(false);
-		disableShowBtn();
+		showBtn.setDisable(true);
 		errorLbl.setVisible(false);
 	}
 
@@ -396,6 +319,7 @@ public class ConvertWindow extends Stage
 	{
 		try
 		{
+			// dont know which type numerical will be yet, have to initialize it so eclipse doesn't yell at me
 			Numerical numerical = null;
 
 			switch (lastInput)
@@ -418,19 +342,21 @@ public class ConvertWindow extends Stage
 					break;
 			}
 
+			// if input was deleting or non alphanumeric
 			if (input.equals(""))
 			{
 				clearAll();
 			}
-			else
+			else // actual input
 			{
 				if (numerical.isValid())
 				{
+					// valid input so get results and show show them
 					result = numerical.convert();
 					setTextFields(result);
-					enableShowBtn();
+					showBtn.setDisable(false); // enable
 				}
-				else
+				else // create & show invalid error label
 				{
 					invalid("Invalid " + numerical.getClass().getSimpleName() + " Input.", false);
 				}
@@ -447,7 +373,6 @@ public class ConvertWindow extends Stage
 			{
 				invalid("Invalid " + lastInput.toString() + " Input.", false);
 			}
-
 		}
 		catch (NullPointerException e)
 		{
@@ -458,14 +383,16 @@ public class ConvertWindow extends Stage
 	}
 
 	/**
-	 * Sets all textfields except the one that is the input. Changing the text of the
-	 * input textfield causes caret position issues and manually altering the position
-	 * caret causes highlighting issues.
+	 * Sets all textfields except the one that is the input.
 	 * 
 	 * @param result
+	 *            The result of the conversions to display in the textfields
 	 */
 	private void setTextFields(Result result)
 	{
+		// Changing the text of the input textfield causes caret position issues. 
+		// Manually altering the position caret causes highlighting issues.
+		// workaround: only set the text of the textfields the user isn't typing into
 		switch (lastInput)
 		{
 			case Decimal:
@@ -497,7 +424,7 @@ public class ConvertWindow extends Stage
 	 * @param errorText
 	 *            The error label text.
 	 * @param concatenate
-	 *            True if preceded by 'Invalid input: '. False if
+	 *            True: prefix with 'Invalid input: '.
 	 */
 	private void invalid(String errorText, boolean concatenate)
 	{
@@ -510,6 +437,6 @@ public class ConvertWindow extends Stage
 			errorLbl.setText(errorText);
 		}
 		errorLbl.setVisible(true);
-		disableShowBtn();
+		showBtn.setDisable(true);
 	}
 }
