@@ -88,8 +88,7 @@ public class ShowMeWindow extends Stage
 
 		firstIteration = false;
 
-		this.setMinWidth(450);
-		//this.setResizable(false);
+		this.setMinWidth(520);
 		this.show();
 	}
 
@@ -135,6 +134,8 @@ public class ShowMeWindow extends Stage
 	private Button createButton(String string)
 	{
 		Button button = new Button("To " + string);
+		button.setMinWidth(120);
+		button.setMaxWidth(250);
 		button.setOnMouseClicked(e ->
 		{
 			showConversion(string);

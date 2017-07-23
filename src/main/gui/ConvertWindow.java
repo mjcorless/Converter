@@ -78,7 +78,7 @@ public class ConvertWindow extends Stage
 
 		gridpane.setAlignment(Pos.CENTER);
 		gridpane.setVgap(3);
-		Scene scene = new Scene(gridpane, 320, 220);
+		Scene scene = new Scene(gridpane, 320, 225);
 		scene.getStylesheets().add("/main/resources/css/convert.css");
 		this.setScene(scene);
 		this.setResizable(false);
@@ -165,6 +165,7 @@ public class ConvertWindow extends Stage
 	 */
 	private void initButtons()
 	{
+		// --------------SHOW BUTTON---------------
 		showBtn = new Button("Show Me!");
 		showBtn.setPrefWidth(105);
 		showBtn.getStyleClass().add("showBtn-enable");
@@ -179,6 +180,7 @@ public class ConvertWindow extends Stage
 		GridPane.setHalignment(showBtn, HPos.CENTER);
 		gridpane.add(showBtn, 0, 5, 3, 1);
 
+		// --------------Groups (clear buttons)--------------
 		// use array to easily iterate through the for loop
 		Group[] tempGrpArray = new Group[InputType.values().length];
 
@@ -194,9 +196,7 @@ public class ConvertWindow extends Stage
 			GridPane.setMargin(tempGrpArray[row], new Insets(0, 5, 0, 0));
 		}
 
-		// be able to call these without using an array index throughout the class
-		// cant initialzie array with the 4 group buttons because the group
-		// buttons will still be uninitialized
+		// be able to call these throughout the class without using an array index
 		decClearBtn = tempGrpArray[0];
 		binClearBtn = tempGrpArray[1];
 		hexClearBtn = tempGrpArray[2];
@@ -218,12 +218,14 @@ public class ConvertWindow extends Stage
 		r1.setRotate(-45);
 		final Rectangle r2 = getCard();
 		r2.setRotate(45);
+		// Change color on mouse over
 		grp.setOnMouseEntered(e ->
 		{
 			circle.setFill(Color.web("#366E9B"));
 			r1.setFill(Color.WHITE);
 			r2.setFill(Color.WHITE);
 		});
+		// Reset change on mouse exit
 		grp.setOnMouseExited(e ->
 		{
 			circle.setFill(Color.web("#4c4c4c"));

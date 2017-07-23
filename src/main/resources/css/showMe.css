@@ -3,49 +3,59 @@
 	font-family: 'PT Serif', serif;
 	src: url('/main/resources/fonts/PT_Serif/PT_Serif-Web-Bold.ttf');
 }
+@font-face 
+{	
+	font-family: 'Inconsolata', monospace;
+	src: url('/main/resources/fonts/Inconsolata/Inconsolata-Bold.ttf');  
+}
 
 /* WebView does NOT inherit the javaFX stage/scene stylesheet */
 .root 
 {
-	-fx-background-color: #7AAAC1;
-	-fx-font: 14pt 'PT Serif';
+	-fx-background-color: #D2EFFF;
+}
+
+.label
+{
+	-fx-font: 18pt 'PT Serif';
+	-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.4) , 1,1,1,1 );
 }
 
 /* Blue Stylish button: values are from playing with a hexcolorpicker */
 .button
 {
-   	-fx-background-color: 
-        #090a0c,
-        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
-        linear-gradient(#20262b, #191d22),
-        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
-    -fx-background-radius: 5,4,3,5;
-    -fx-background-insets: 0,1,2,0;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
-    -fx-font: 14 "PT Serif";
+	-fx-font: 10pt 'Inconsolata';
     -fx-text-fill: white;
-    
-    -fx-padding: 8 15 15 15;
+   	-fx-background-color: 
+        #000032,
+        linear-gradient(#104296 0%, #002452 20%, #001D44 100%),
+        linear-gradient(#0C2656, #002557),
+        radial-gradient(center 50% 0%, radius 100%, rgba(105,167,255,0.9), rgba(21,0,255,0.5));
+    /* drop shadow adds the glow-ish  to button */
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,50,1) , 15, 0.0 , 0 , 1 );
+    /* padding and insets are used to mimick button press */
+    -fx-padding: 8 5 15 5;
     -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
 }
 /* button mouse over */
 .button:hover 
 {
-	-fx-opacity: 0.7;
+	-fx-opacity: 0.7; 
 	-fx-cursor: hand;
 }
 /* while button is being pressed - padding + insets makes it look like button is being clicked */
 .button:pressed 
 {
-    -fx-padding: 10 15 13 15;
-    -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
+    -fx-padding: 10 5 13 5;
+    -fx-background-insets: 3 0 0 0, 3 0 2 0, 3 0 3 0, 3 0 4 0;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,50,1) , 10, 0.0 , 0 , 1 );
 }
 
 /* default JavaFX disabled style doesn't look disabled */
 .button:disabled
 {
-    -fx-opacity: 0.1;
-    -fx-padding: 10 15 13 15;
+    -fx-opacity: 0.05;
+    -fx-padding: 10 5 13 5;
     -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
 }
 
