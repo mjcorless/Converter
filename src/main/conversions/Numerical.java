@@ -1,28 +1,22 @@
-package conversions;
+package main.conversions;
 
-public abstract class Numerical
+public interface Numerical
 {
-	protected abstract String getDecimal();
+	public String getDecimal();
 
-	protected abstract String getBinary();
+	public String getBinary();
 
-	protected abstract String getHex();
+	public String getHex();
 
-	protected abstract String getOctal();
+	public String getOctal();
 
-	protected abstract String showMeToDecimal();
+	public String showMeToDecimal();
 
-	protected abstract String showMeToBinary();
+	public String showMeToBinary();
 
-	protected abstract String showMeToHexadecimal();
+	public String showMeToHexadecimal();
 
-	protected abstract String showMeToOctal();
+	public String showMeToOctal();
 
-	public abstract boolean isValid();
-
-	public Result convert()
-	{
-		return new Result(getDecimal(), getBinary(), getHex(), getOctal(), showMeToDecimal(),
-				showMeToBinary(), showMeToHexadecimal(), showMeToOctal());
-	}
+	public boolean isValid();
 }

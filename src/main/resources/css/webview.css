@@ -1,11 +1,11 @@
 /*webview.css controls the css for the webview inside of ShowMe window. */
+/* WebViews do NOT inherit the javaFX stage/scene stylesheet */
 body 
 {
     background-color: #7AAAC1;
     font-family: Arial, Helvetica, san-serif;
     text-align: center
 }
-
 
 /* Scrollbar for webview */
 ::-webkit-scrollbar 

@@ -1,6 +1,6 @@
-package conversions;
+package main.conversions;
 
-public class Decimal extends Numerical
+public class Decimal implements Numerical
 {
 	private String decimal;
 
@@ -80,8 +80,8 @@ public class Decimal extends Numerical
 			remainder = temp % 16;
 			temp = temp / 16;
 			result.append(Integer.toHexString(remainder));
-			sb.append("<br>Result: " + temp + "\tRemainder: " + remainder + " (Hex: "
-					+ Integer.toHexString(remainder) + ")");
+			sb.append("<br>Result: " + temp + "\tRemainder: " + remainder + " (Hex: " + Integer.toHexString(remainder)
+					+ ")");
 			sb.append("<br>------------------------------");
 		}
 

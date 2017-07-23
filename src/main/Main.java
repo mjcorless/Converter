@@ -1,7 +1,8 @@
-package gui;
+package main;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import main.gui.ConvertWindow;
 
 public class Main extends Application
 {

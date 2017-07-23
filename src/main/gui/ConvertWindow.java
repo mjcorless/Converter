@@ -1,11 +1,5 @@
-package gui;
+package main.gui;
 
-import conversions.Binary;
-import conversions.Decimal;
-import conversions.Hexadecimal;
-import conversions.Numerical;
-import conversions.Octal;
-import conversions.Result;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,6 +15,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import main.conversions.Binary;
+import main.conversions.Decimal;
+import main.conversions.Hexadecimal;
+import main.conversions.Numerical;
+import main.conversions.Octal;
+import main.conversions.Result;
 
 /**
  * ConvertWindow creates the scene and action events for the convert window.
@@ -67,8 +67,9 @@ public class ConvertWindow extends Stage
 		 * version so apparently fx still defaults to the appropriate pixel
 		 * version..
 		 */
-		this.getIcons().addAll(new Image("/resources/images/calculator64.png"),
-				new Image("/resources/images/calculator32.png"), new Image("/resources/images/calculator64.png"));
+		this.getIcons().addAll(new Image("/main/resources/images/calculator64.png"),
+				new Image("/main/resources/images/calculator32.png"),
+				new Image("/main/resources/images/calculator64.png"));
 
 		gridpane = new GridPane();
 		initLabels();
@@ -78,7 +79,7 @@ public class ConvertWindow extends Stage
 		gridpane.setAlignment(Pos.CENTER);
 		gridpane.setVgap(3);
 		Scene scene = new Scene(gridpane, 320, 220);
-		scene.getStylesheets().add("/resources/css/convert.css");
+		scene.getStylesheets().add("/main/resources/css/convert.css");
 		this.setScene(scene);
 		this.setResizable(false);
 		this.show();
@@ -352,7 +353,7 @@ public class ConvertWindow extends Stage
 				if (numerical.isValid())
 				{
 					// valid input so get results and show show them
-					result = numerical.convert();
+					result = new Result(numerical);
 					setTextFields(result);
 					showBtn.setDisable(false); // enable
 				}

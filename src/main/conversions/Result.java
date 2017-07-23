@@ -1,8 +1,8 @@
-package conversions;
+package main.conversions;
 
 /**
- * Result contains the binary, decimal, hexadecimal, and octal results for each
- * conversion as well as how the conversions are done.
+ * Result contains the binary, decimal, hexadecimal, and octal results for each conversion
+ * as well as how the conversions are done.
  * 
  * @author Matthew Corless
  */
@@ -17,41 +17,21 @@ public class Result
 	private final String showHexadecimal;
 	private final String showOctal;
 
-	Result(Result result)
-	{
-		decimal = result.decimal;
-		binary = result.binary;
-		hexadecimal = result.hexadecimal;
-		octal = result.octal;
-		showDecimal = result.showDecimal;
-		showBinary = result.showBinary;
-		showHexadecimal = result.showHexadecimal;
-		showOctal = result.showOctal;
-	}
-
 	/**
-	 * Creates result object with all 8 fields.
+	 * Creates result object with every conversion for the user's input.
 	 * 
-	 * @param decimal
-	 * @param binary
-	 * @param hex
-	 * @param Octal
-	 * @param toDecimal
-	 * @param toBinary
-	 * @param toHex
-	 * @param toOctal
+	 * @param numerical
 	 */
-	Result(String dec, String bin, String hex, String oct, String showDec, String showBin,
-			String showHex, String showOct)
+	public Result(Numerical numerical)
 	{
-		decimal = dec;
-		binary = bin;
-		hexadecimal = hex;
-		octal = oct;
-		showDecimal = showDec;
-		showBinary = showBin;
-		showHexadecimal = showHex;
-		showOctal = showOct;
+		decimal = numerical.getDecimal();
+		binary = numerical.getBinary();
+		hexadecimal = numerical.getHex();
+		octal = numerical.getOctal();
+		showDecimal = numerical.showMeToDecimal();
+		showBinary = numerical.showMeToBinary();
+		showHexadecimal = numerical.showMeToHexadecimal();
+		showOctal = numerical.showMeToOctal();
 	}
 
 	public String getDecimal()

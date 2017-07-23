@@ -1,6 +1,6 @@
-package conversions;
+package main.conversions;
 
-public class Octal extends Numerical
+public class Octal implements Numerical
 {
 	private String octal;
 

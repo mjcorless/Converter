@@ -1,6 +1,6 @@
-package conversions;
+package main.conversions;
 
-public class Hexadecimal extends Numerical
+public class Hexadecimal implements Numerical
 {
 	private String hex;
 

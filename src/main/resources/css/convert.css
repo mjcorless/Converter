@@ -1,13 +1,13 @@
 @font-face 
 {	
 	font-family: 'Inconsolata', monospace;
-	src: url('/resources/fonts/Inconsolata/Inconsolata-Bold.ttf');  
+	src: url('/main/resources/fonts/Inconsolata/Inconsolata-Bold.ttf');  
 }
 
 @font-face 
 {
 	font-family: 'PT Serif', serif;
-	src: url('/resources/fonts/PT_Serif/PT_Serif-Web-Bold.ttf');
+	src: url('/main/resources/fonts/PT_Serif/PT_Serif-Web-Bold.ttf');
 }
 
 .root

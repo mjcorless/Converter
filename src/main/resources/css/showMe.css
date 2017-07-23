@@ -1,26 +1,17 @@
 @font-face 
 {
-	font-family: 'Inconsolata', monospace;
-	src: url('/resources/fonts/Inconsolata/Inconsolata-Bold.ttf');
-}
-
-@font-face 
-{
 	font-family: 'PT Serif', serif;
-	src: url('/resources/fonts/PT_Serif/PT_Serif-Web-Bold.ttf');
+	src: url('/main/resources/fonts/PT_Serif/PT_Serif-Web-Bold.ttf');
 }
 
+/* WebView does NOT inherit the javaFX stage/scene stylesheet */
 .root 
 {
 	-fx-background-color: #7AAAC1;
-	-fx-font: 12pt 'Inconsolata';
-}
-
-.label 
-{
 	-fx-font: 14pt 'PT Serif';
 }
 
+/* Blue Stylish button: values are from playing with a hexcolorpicker */
 .button
 {
    	-fx-background-color: 
@@ -37,16 +28,20 @@
     -fx-padding: 8 15 15 15;
     -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
 }
+/* button mouse over */
 .button:hover 
 {
 	-fx-opacity: 0.7;
 	-fx-cursor: hand;
 }
+/* while button is being pressed - padding + insets makes it look like button is being clicked */
 .button:pressed 
 {
     -fx-padding: 10 15 13 15;
     -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
 }
+
+/* default JavaFX disabled style doesn't look disabled */
 .button:disabled
 {
     -fx-opacity: 0.1;
