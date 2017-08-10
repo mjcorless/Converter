@@ -3,7 +3,7 @@
 
 body 
 {
-    background-color: #D2EFFF;
+    background-color: #C0DCFF;
     font-family: Arial, Helvetica, san-serif;
     text-align: center;
 }
@@ -19,18 +19,24 @@ body
 ::-webkit-scrollbar-track 
 {
     border-radius: 10px;
-    background: #9BD8F9;
+    background: #7DB7FF;
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb 
 {
     border-radius: 10px;
-    background: #005EFF; 
+    background: #3781FF; 
 }
 
 /* handle mouse-over, changing cursor to hand doesn't work here :/ */
 ::-webkit-scrollbar-thumb:hover
 { 
-	background: #3781FF;
+	background: #1169FF;
+}
+
+/* when scrollbar is clicked/dragged */
+::-webkit-scrollbar-thumb:active
+{
+    background: #003A9D; 
 }
