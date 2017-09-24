@@ -12,7 +12,7 @@
 /* WebView does NOT inherit the javaFX stage/scene stylesheet */
 .root 
 {
-	-fx-background-color: #C0DCFF;
+	-fx-background-color: #99c7ff;
 }
 
 .label
