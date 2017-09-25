@@ -1,11 +1,5 @@
-package gui;
+package main.gui;
 
-import conversions.Binary;
-import conversions.Decimal;
-import conversions.Hexadecimal;
-import conversions.Numerical;
-import conversions.Octal;
-import conversions.Result;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,6 +15,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import main.conversions.Binary;
+import main.conversions.Decimal;
+import main.conversions.Hexadecimal;
+import main.conversions.Numerical;
+import main.conversions.Octal;
+import main.conversions.Result;
 
 /**
  * ConvertWindow creates the scene and action events for the convert window.
@@ -67,8 +67,9 @@ public class ConvertWindow extends Stage
 		 * version so apparently fx still defaults to the appropriate pixel
 		 * version..
 		 */
-		this.getIcons().addAll(new Image("/resources/images/calculator64.png"),
-				new Image("/resources/images/calculator32.png"), new Image("/resources/images/calculator64.png"));
+		this.getIcons().addAll(new Image("/main/resources/images/calculator64.png"),
+				new Image("/main/resources/images/calculator32.png"),
+				new Image("/main/resources/images/calculator64.png"));
 
 		gridpane = new GridPane();
 		initLabels();
@@ -77,8 +78,8 @@ public class ConvertWindow extends Stage
 
 		gridpane.setAlignment(Pos.CENTER);
 		gridpane.setVgap(3);
-		Scene scene = new Scene(gridpane, 320, 220);
-		scene.getStylesheets().add("/resources/css/convert.css");
+		Scene scene = new Scene(gridpane, 320, 225);
+		scene.getStylesheets().add("/main/resources/css/convert.css");
 		this.setScene(scene);
 		this.setResizable(false);
 		this.show();
@@ -164,6 +165,7 @@ public class ConvertWindow extends Stage
 	 */
 	private void initButtons()
 	{
+		// --------------SHOW BUTTON---------------
 		showBtn = new Button("Show Me!");
 		showBtn.setPrefWidth(105);
 		showBtn.getStyleClass().add("showBtn-enable");
@@ -178,6 +180,7 @@ public class ConvertWindow extends Stage
 		GridPane.setHalignment(showBtn, HPos.CENTER);
 		gridpane.add(showBtn, 0, 5, 3, 1);
 
+		// --------------Groups (clear buttons)--------------
 		// use array to easily iterate through the for loop
 		Group[] tempGrpArray = new Group[InputType.values().length];
 
@@ -193,9 +196,7 @@ public class ConvertWindow extends Stage
 			GridPane.setMargin(tempGrpArray[row], new Insets(0, 5, 0, 0));
 		}
 
-		// be able to call these without using an array index throughout the class
-		// cant initialzie array with the 4 group buttons because the group
-		// buttons will still be uninitialized
+		// be able to call these throughout the class without using an array index
 		decClearBtn = tempGrpArray[0];
 		binClearBtn = tempGrpArray[1];
 		hexClearBtn = tempGrpArray[2];
@@ -217,12 +218,14 @@ public class ConvertWindow extends Stage
 		r1.setRotate(-45);
 		final Rectangle r2 = getCard();
 		r2.setRotate(45);
+		// Change color on mouse over
 		grp.setOnMouseEntered(e ->
 		{
 			circle.setFill(Color.web("#366E9B"));
 			r1.setFill(Color.WHITE);
 			r2.setFill(Color.WHITE);
 		});
+		// Reset change on mouse exit
 		grp.setOnMouseExited(e ->
 		{
 			circle.setFill(Color.web("#4c4c4c"));
@@ -352,7 +355,7 @@ public class ConvertWindow extends Stage
 				if (numerical.isValid())
 				{
 					// valid input so get results and show show them
-					result = numerical.convert();
+					result = new Result(numerical);
 					setTextFields(result);
 					showBtn.setDisable(false); // enable
 				}

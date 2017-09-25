@@ -1,6 +1,5 @@
-package gui;
+package main.gui;
 
-import conversions.Result;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,6 +11,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import main.conversions.Result;
 
 public class ShowMeWindow extends Stage
 {
@@ -28,8 +28,9 @@ public class ShowMeWindow extends Stage
 	public void start(String input, Result conversion)
 	{
 		this.setTitle("Show Me!");
-		this.getIcons().addAll(new Image("/resources/images/calculator64.png"),
-				new Image("/resources/images/calculator32.png"), new Image("/resources/images/calculator64.png"));
+		this.getIcons().addAll(new Image("/main/resources/images/calculator64.png"),
+				new Image("/main/resources/images/calculator32.png"),
+				new Image("/main/resources/images/calculator64.png"));
 
 		result = conversion;
 
@@ -41,7 +42,7 @@ public class ShowMeWindow extends Stage
 		engine = view.getEngine();
 		engine.loadContent(String.format("<body><div style=\"text-align:center\" valign=\"center\">%s</div></body>",
 				inputLabel.getText()));
-		engine.setUserStyleSheetLocation(getClass().getResource("/resources/css/webview.css").toString());
+		engine.setUserStyleSheetLocation(getClass().getResource("/main/resources/css/webview.css").toString());
 
 		gridpane.setHgap(5);
 		gridpane.setVgap(10);
@@ -53,7 +54,7 @@ public class ShowMeWindow extends Stage
 
 		Scene scene = new Scene(gridpane, 550, 550);
 
-		scene.getStylesheets().add("/resources/css/showMe.css");
+		scene.getStylesheets().add("/main/resources/css/showMe.css");
 		this.setScene(scene);
 
 		double x = 0;
@@ -87,8 +88,7 @@ public class ShowMeWindow extends Stage
 
 		firstIteration = false;
 
-		this.setMinWidth(450);
-		//this.setResizable(false);
+		this.setMinWidth(520);
 		this.show();
 	}
 
@@ -134,6 +134,8 @@ public class ShowMeWindow extends Stage
 	private Button createButton(String string)
 	{
 		Button button = new Button("To " + string);
+		button.setMinWidth(120);
+		button.setMaxWidth(250);
 		button.setOnMouseClicked(e ->
 		{
 			showConversion(string);

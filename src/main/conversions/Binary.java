@@ -1,6 +1,6 @@
-package conversions;
+package main.conversions;
 
-public class Binary extends Numerical
+public class Binary implements Numerical
 {
 	private String binary;
 

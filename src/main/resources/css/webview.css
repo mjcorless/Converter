@@ -1,35 +1,42 @@
 /*webview.css controls the css for the webview inside of ShowMe window. */
+/* WebViews do NOT inherit the javaFX stage/scene stylesheet */
+
 body 
 {
-    background-color: #7AAAC1;
+    background-color: #99c7ff;
     font-family: Arial, Helvetica, san-serif;
-    text-align: center
+    text-align: center;
 }
-
 
 /* Scrollbar for webview */
 ::-webkit-scrollbar 
 {
-    width: 14px;
+    width: 16px;
+    height: 16px;
 }
  
 /* Track */
 ::-webkit-scrollbar-track 
 {
     border-radius: 10px;
-    background: #9FB8C5;
+    background: #7DB7FF;
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb 
 {
-    
     border-radius: 10px;
-    background: #5D8397; 
+    background: #3781FF; 
 }
 
 /* handle mouse-over, changing cursor to hand doesn't work here :/ */
 ::-webkit-scrollbar-thumb:hover
 { 
-	opacity: 0.7;
+	background: #1169FF;
+}
+
+/* when scrollbar is clicked/dragged */
+::-webkit-scrollbar-thumb:active
+{
+    background: #003A9D; 
 }
