@@ -9,10 +9,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>src/main</sourceDirectory>
     <resources>
       <resource>
-        <directory>src</directory>
+        <directory>src/main</directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>
