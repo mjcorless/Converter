@@ -59,23 +59,21 @@ public class ConvertWindow extends Stage
 	{
 		this.setTitle("Converter");
 		/*
-		 * I still don't understand how the icons in javafx work. This is from
-		 * the swing implementation where I read to use multiple images so that
-		 * it would choose the right one for the OS. However, if I only add one
-		 * image, it works on my windows 10 regardless if it is the 16, 32, or
-		 * 64 pixel version. When I add all three it chooses the 32 pixel
-		 * version so apparently fx still defaults to the appropriate pixel
-		 * version..
+		 * Leftover from swing implementation. Multiple images are used so that the
+		 * OS can choose the right one. Windows 10 can use any of the 3 but will default
+		 * to using the 32 px version.
 		 */
 		this.getIcons().addAll(new Image("/main/resources/images/calculator64.png"),
 				new Image("/main/resources/images/calculator32.png"),
 				new Image("/main/resources/images/calculator64.png"));
-
+		
+		// initialize objects in window
 		gridpane = new GridPane();
 		initLabels();
 		initTextFields();
 		initButtons();
-
+		
+		// set CSS and other styles/attributes to initialized objects
 		gridpane.setAlignment(Pos.CENTER);
 		gridpane.setVgap(3);
 		Scene scene = new Scene(gridpane, 320, 225);
@@ -90,6 +88,7 @@ public class ConvertWindow extends Stage
 	 */
 	private void initLabels()
 	{
+		// conversion labels
 		Label decLbl = new Label("Decimal");
 		gridpane.add(decLbl, 0, 0);
 		Label binLbl = new Label("Binary");
@@ -98,7 +97,8 @@ public class ConvertWindow extends Stage
 		gridpane.add(hexLbl, 0, 2);
 		Label octLbl = new Label("Octal");
 		gridpane.add(octLbl, 0, 3);
-
+		
+		// error label
 		errorLbl = new Label();
 		errorLbl.getStyleClass().add("error-label");
 		GridPane.setHalignment(errorLbl, HPos.CENTER);
@@ -145,10 +145,12 @@ public class ConvertWindow extends Stage
 		{
 			lastInput = inputType;
 		});
+		
 		// when textfield's text changes
 		textField.textProperty().addListener((observable, oldText, newText) ->
 		{
-			// prevent other textfields getting their text set from causing a stackoverflow
+			// prevent other textfields getting their text set from calling 
+			// this action event and causing a stackoverflow
 			// only textfield user is typing into should call convertInput
 			if (lastInput == inputType)
 			{
@@ -207,7 +209,7 @@ public class ConvertWindow extends Stage
 	 * Create the clear text field buttons. The button is just a group with a mouseover
 	 * and onclick event.
 	 * 
-	 * @return
+	 * @return Group - Group with an on mouse entered and exited to mimick a button
 	 */
 	private Group getClearButton()
 	{
@@ -241,7 +243,7 @@ public class ConvertWindow extends Stage
 	/**
 	 * Creates the rectangles that form the clear button groups
 	 * 
-	 * @return
+	 * @return Rectangle
 	 */
 	private Rectangle getCard()
 	{
